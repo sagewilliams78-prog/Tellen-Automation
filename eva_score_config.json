@@ -1,5 +1,0 @@
-{
-  "mode": "shadow",
-  "threshold": 21,
-  "_doc": "shadow = score every buy-zone setup and log what it WOULD do, place nothing (safe, default). off = disable. score = let the scorer decide entries -- do NOT set this until ~/eva_score_shadow.csv shows the scorer beating the filters on real fills over at least a couple of weeks. Simulation says 3x net P&L but that is one dataset in one rallying regime."
-}

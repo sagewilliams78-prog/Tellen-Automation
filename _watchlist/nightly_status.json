@@ -1,5 +1,0 @@
-{
-  "last_run": "2026-08-28T17:36:18.152169-07:00",
-  "status": "blocked",
-  "summary": "symbol_screener.py failed twice at MCP session.initialize() with 'Server returned an error response' (Robinhood auth/token likely expired, needs reauth_robinhood.py); no new _watchlist/screener-latest.json was written (still dated 2026-08-27 09:17). No backtest results this run, so no watchlist change made. current.json unchanged at 14 symbols: IBRX, IOVA, NVDA, TSLA, AMD, SMCI, GDX, COIN, MSFT, MCD, HD, UNH, AAPL, CVX."
-}
