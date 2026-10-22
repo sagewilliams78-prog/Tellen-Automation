@@ -43,6 +43,15 @@
     targets.forEach(function (el) { io.observe(el); });
   })();
 
+  /* ---------- Try It Live: open chat ---------- */
+  var tryLiveChatBtn = document.getElementById("trylive-chat-btn");
+  if (tryLiveChatBtn) {
+    tryLiveChatBtn.addEventListener("click", function () {
+      var launcher = document.getElementById("chatLauncher");
+      if (launcher) launcher.click();
+    });
+  }
+
   /* ---------- Footer year ---------- */
   document.getElementById("year").textContent = new Date().getFullYear();
 
