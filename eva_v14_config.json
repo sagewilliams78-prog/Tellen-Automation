@@ -1,0 +1,45 @@
+{
+  "_doc": "EVA v14 configuration. v13 hardcoded these; v14 reads them so a filter can be A/B tested without editing a live trading file. Every default below is v13's CURRENT behaviour, so v14 starts as a behavioural no-op and any change is deliberate.",
+  "version": "14.0.0",
+  "reliability": {
+    "mcp_call_timeout_seconds": 45,
+    "_timeout_doc": "THE FIX FOR THE REAL 2026-09-01 INCIDENT. v13 made 11 session.call_tool() calls with NO timeout of any kind. One of them blocked in kevent() at 0% CPU and Eva froze mid-scan for 7+ minutes WHILE HOLDING AN UNMANAGED MSFT POSITION -- its stop was never checked. A hung trading bot holding stock is strictly worse than a stopped one, because it looks alive. 45s is generous for a normal call (observed: under 3s) and still catches a hang within one scan cycle.",
+    "scan_stall_seconds": 180,
+    "_stall_doc": "If a full scan takes longer than this, something is wrong even if no single call timed out. Logged loudly so the mechanic and the dashboard can see it.",
+    "max_consecutive_scan_errors": 5,
+    "_error_doc": "After this many failed scans in a row, exit non-zero so launchd/the cycle runner restarts a clean process rather than limping."
+  },
+  "filters": {
+    "require_bullish_candle": true,
+    "_bullish_doc": "v13 behaviour, kept ON. Validated across 3 independent train/test splits at PF 1.41/1.42/1.43 -- remarkably stable. The 'volume only' alternative that beat it in one split FAILED the other two, so it was correctly rejected.",
+    "require_volume_confirmation": false,
+    "_volume_doc": "OFF by default = v13 behaviour. Backtesting 2026-09-01 found enabling this beat v13 on profit factor and win rate in 3/3 splits (PF 1.41->1.60, 1.42->2.13, 1.43->1.67), but total return was LOWER in 2 of 3 because it takes ~15% fewer trades. It also contradicts an earlier 2026-08-21 backtest that found volume hurt. Left OFF until Eva has enough real trades to check the model against reality -- see decision_journal below. Flip to true to A/B it.",
+    "min_zone_depth_pct": null,
+    "_depth_doc": "null = no minimum. Tested at 0.5% and 1.0%; neither beat baseline consistently across splits."
+  },
+  "ranking": {
+    "mode": "net_edge",
+    "_ranking_doc": "'net_edge' (v14 default) ranks candidates by expected move to target MINUS that symbol's real spread. 'depth' is v13's old behaviour, kept for comparison. Validated 2026-09-01: on identical inputs across 50 contested days, net_edge lifted win rate 32.1%->41.4% and profit factor 0.59->0.82. Spreads on this watchlist span 25x (NVDA 0.005% .. IBRX 0.127%), so cost-blind ranking was leaving money on the table."
+  },
+  "decision_journal": {
+    "enabled": true,
+    "path": "~/eva_decisions.csv",
+    "_journal_doc": "THE MOST IMPORTANT ADDITION IN v14. v13 logged only COMPLETED TRADES -- 4 rows total, which is why no backtest could ever be validated against reality. Backtests predicted ~100 trades per 4 months; Eva took 4. That 25x gap is unexplained and makes every optimisation unverifiable. This logs EVERY symbol on EVERY scan with the full decision context, so within days there is a real dataset to test the model against. Cheap to write, and it is the only path out of guessing."
+  },
+  "risk": {
+    "_doc": "Unchanged from v13. These are proven and deliberately not part of this version's changes.",
+    "inherit_from_v13": true
+  },
+  "exits": {
+    "partial_enabled": true,
+    "partial_at_pct": 1.0,
+    "partial_fraction": 0.5,
+    "_doc": "Sell half the position at +1%, let the rest run to target/stop/EOD. Validated 2026-09-01 across 3 independent train/test splits: PROFITABLE DAYS rose in all three (60->63%, 58->65%, 49->61%) while profit factor held (1.43->1.29, 1.51->1.52, 1.49->1.50). Directly targets 'close more days green'. Breakeven stops were tested for the same goal and FAILED hard (PF 0.50) -- noise hits the stop before the move develops."
+  },
+  "sizing": {
+    "scale_risk_with_account": false,
+    "risk_pct_of_account": 1.0,
+    "max_risk_dollars": 2.5,
+    "_doc": "OFF = shipped behaviour, a flat $2.50 risked per trade at any account size. MEASURED CONSEQUENCE (2026-09-01, capital-constrained backtest, 101 sessions): $1,250 and $5,000 both return $21.49 -- identical. Extra deposits are never deployed; return falls 9.4% -> 1.7% -> 0.4% as capital rises. Scaling to 1% instead: $5,000 -> $340.92 (6.8%). 2% was WORSE ($212) because oversized positions eat the slots. TO ENABLE after funding: set scale_risk_with_account true AND raise max_risk_dollars (it is the hard ceiling; at 2.50 this stays a no-op even if enabled). Understand the cost first: worst backtested day goes from -$5.29 to -$105.78 at $5,000. Bigger account, bigger losses."
+  }
+}

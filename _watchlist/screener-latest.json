@@ -1,0 +1,218 @@
+{
+  "generated_at": "2026-08-27T12:17:20.737125-04:00",
+  "universe_size": 29,
+  "results": [
+    {
+      "symbol": "AAPL",
+      "trades": 3,
+      "winrate": 66.66666666666666,
+      "pnl": 0.6036087368371501,
+      "flags": []
+    },
+    {
+      "symbol": "MSFT",
+      "trades": 4,
+      "winrate": 75.0,
+      "pnl": 1.3271906608547361,
+      "flags": []
+    },
+    {
+      "symbol": "GOOGL",
+      "trades": 5,
+      "winrate": 40.0,
+      "pnl": -0.2200598089674396,
+      "flags": []
+    },
+    {
+      "symbol": "AMZN",
+      "trades": 6,
+      "winrate": 50.0,
+      "pnl": -0.8261290283156112,
+      "flags": []
+    },
+    {
+      "symbol": "META",
+      "trades": 7,
+      "winrate": 57.14285714285714,
+      "pnl": -2.9366003543003747,
+      "flags": []
+    },
+    {
+      "symbol": "JPM",
+      "trades": 9,
+      "winrate": 55.55555555555556,
+      "pnl": -2.07256760373662,
+      "flags": []
+    },
+    {
+      "symbol": "BAC",
+      "trades": 6,
+      "winrate": 50.0,
+      "pnl": -0.35934658482916915,
+      "flags": []
+    },
+    {
+      "symbol": "WFC",
+      "trades": 6,
+      "winrate": 16.666666666666664,
+      "pnl": -2.8468417456336956,
+      "flags": []
+    },
+    {
+      "symbol": "XOM",
+      "trades": 6,
+      "winrate": 33.33333333333333,
+      "pnl": -0.1507381730405037,
+      "flags": []
+    },
+    {
+      "symbol": "CVX",
+      "trades": 8,
+      "winrate": 62.5,
+      "pnl": 0.28229687682850924,
+      "flags": []
+    },
+    {
+      "symbol": "UNH",
+      "trades": 4,
+      "winrate": 100.0,
+      "pnl": 0.9486339691529547,
+      "flags": []
+    },
+    {
+      "symbol": "JNJ",
+      "trades": 6,
+      "winrate": 33.33333333333333,
+      "pnl": -0.4702715655314255,
+      "flags": []
+    },
+    {
+      "symbol": "PFE",
+      "trades": 3,
+      "winrate": 33.33333333333333,
+      "pnl": -0.5356343666242737,
+      "flags": []
+    },
+    {
+      "symbol": "WMT",
+      "trades": 4,
+      "winrate": 50.0,
+      "pnl": -0.013897417849027482,
+      "flags": []
+    },
+    {
+      "symbol": "HD",
+      "trades": 7,
+      "winrate": 57.14285714285714,
+      "pnl": 1.2769601575750535,
+      "flags": []
+    },
+    {
+      "symbol": "MCD",
+      "trades": 5,
+      "winrate": 80.0,
+      "pnl": 1.2965709982464357,
+      "flags": []
+    },
+    {
+      "symbol": "BA",
+      "trades": 3,
+      "winrate": 33.33333333333333,
+      "pnl": -0.48325779827126536,
+      "flags": []
+    },
+    {
+      "symbol": "GE",
+      "trades": 8,
+      "winrate": 37.5,
+      "pnl": -0.07770511619176579,
+      "flags": []
+    },
+    {
+      "symbol": "HON",
+      "trades": 3,
+      "winrate": 0.0,
+      "pnl": -2.0577910283614242,
+      "flags": []
+    },
+    {
+      "symbol": "XLF",
+      "trades": 2,
+      "winrate": 0.0,
+      "pnl": -0.9438659924604877,
+      "flags": []
+    },
+    {
+      "symbol": "XLE",
+      "trades": 8,
+      "winrate": 50.0,
+      "pnl": -0.3613564982256304,
+      "flags": []
+    },
+    {
+      "symbol": "XLV",
+      "trades": 5,
+      "winrate": 20.0,
+      "pnl": -0.6434703291620056,
+      "flags": []
+    },
+    {
+      "symbol": "XLI",
+      "trades": 2,
+      "winrate": 50.0,
+      "pnl": -0.044549225182811375,
+      "flags": []
+    },
+    {
+      "symbol": "XLP",
+      "trades": 1,
+      "winrate": 100.0,
+      "pnl": 0.023764258555138525,
+      "flags": []
+    },
+    {
+      "symbol": "XLU",
+      "trades": 3,
+      "winrate": 66.66666666666666,
+      "pnl": -0.22990510282238574,
+      "flags": []
+    },
+    {
+      "symbol": "AVGO",
+      "trades": 7,
+      "winrate": 14.285714285714285,
+      "pnl": -5.333603220121754,
+      "flags": [
+        "correlated-w/AMD-NVDA"
+      ]
+    },
+    {
+      "symbol": "QCOM",
+      "trades": 9,
+      "winrate": 33.33333333333333,
+      "pnl": -8.83571809908053,
+      "flags": [
+        "correlated-w/AMD-NVDA"
+      ]
+    },
+    {
+      "symbol": "COIN",
+      "trades": 11,
+      "winrate": 45.45454545454545,
+      "pnl": 3.0239228709781547,
+      "flags": [
+        "high-vol-proxy"
+      ]
+    },
+    {
+      "symbol": "MSTR",
+      "trades": 13,
+      "winrate": 53.84615384615385,
+      "pnl": -6.500917166860256,
+      "flags": [
+        "high-vol-proxy"
+      ]
+    }
+  ],
+  "passers": []
+}

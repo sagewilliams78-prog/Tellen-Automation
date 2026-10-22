@@ -1,0 +1,22 @@
+{
+  "desk": "Eva Crypto Desk",
+  "watchlist": ["BTC"],
+  "pair": "BTC-USD",
+  "market": "24/7",
+  "candle_interval": "5m",
+  "rules": {
+    "trend": "EMA20 versus EMA50",
+    "momentum": "RSI14",
+    "range": "rolling 24-hour high and low",
+    "entry_policy": "Do not chase extended moves. Favor trend alignment and confirmation.",
+    "risk_policy": "Crypto risk is isolated from the equity strategy. One BTC position maximum until separately validated.",
+    "execution_policy": "Preview every Robinhood crypto order before any live submission.",
+    "loss_policy": "Never increase size to recover a loss."
+  },
+  "robinhood": {
+    "supported_order_types": ["market", "limit", "stop", "stop-limit"],
+    "agent_can_transfer_crypto": false,
+    "agent_can_stake_crypto": false,
+    "agent_can_lend_crypto": false
+  }
+}

@@ -1,0 +1,300 @@
+{
+  "generated_at": "2026-09-03T16:46:42.414202+00:00",
+  "generated_local": "2026-09-03 09:46:42 AM PDT",
+  "phase": 1,
+  "execution_enabled": false,
+  "assets": {
+    "BTC-USD": {
+      "pair": "BTC-USD",
+      "price": 80902.347510185,
+      "quote": {
+        "bid": 80148.1618639,
+        "ask": 81656.53315647,
+        "mark": 80902.347510185,
+        "spread_pct": 1.8644345176511923,
+        "open_price": 77680.0,
+        "updated_at": "2026-09-03T12:46:40.054-04:00"
+      },
+      "regime": "BREAKOUT",
+      "regime_why": "at range high on 4.4x volume",
+      "agreement": 0.5,
+      "policy": {
+        "allow_long": true,
+        "strategy": "breakout_confirmation",
+        "size_mult": 0.75
+      },
+      "timeframes": {
+        "5m": {
+          "trend": "UP",
+          "structure": "UNKNOWN",
+          "rsi14": 58.92299145337347,
+          "atr_pct": 0.2978880148182845,
+          "volume_ratio": 0.18448038152567023,
+          "close": 80841.26,
+          "regime": "UNCERTAIN"
+        },
+        "15m": {
+          "trend": "UP",
+          "structure": "UNKNOWN",
+          "rsi14": 74.07374106527541,
+          "atr_pct": 0.43096769052038897,
+          "volume_ratio": 0.05378096383387975,
+          "close": 80842.48,
+          "regime": "UNCERTAIN"
+        },
+        "1h": {
+          "trend": "UP",
+          "structure": "UPTREND",
+          "rsi14": 76.01325024956817,
+          "atr_pct": 0.7537143957108886,
+          "volume_ratio": 2.0725888882089554,
+          "close": 80832.05,
+          "regime": "TRENDING_UP"
+        },
+        "4h": {
+          "trend": "UP",
+          "structure": "DOWNTREND",
+          "rsi14": 75.24827631537688,
+          "atr_pct": 1.2920607149198995,
+          "volume_ratio": 4.378707613008149,
+          "close": 81364.13,
+          "regime": "BREAKOUT"
+        }
+      },
+      "score": 63.9,
+      "band": "WATCH",
+      "reason": "score 64",
+      "factors": {
+        "regime": {
+          "value": 0.85,
+          "weight": 20,
+          "points": 17.0,
+          "why": "BREAKOUT permits longs (x0.75)"
+        },
+        "multi_timeframe_agreement": {
+          "value": 0.75,
+          "weight": 20,
+          "points": 15.0,
+          "why": "agreement +0.50"
+        },
+        "trend": {
+          "value": 1.0,
+          "weight": 15,
+          "points": 15.0,
+          "why": "5m:UP, 15m:UP, 1h:UP, 4h:UP"
+        },
+        "momentum": {
+          "value": 0.37,
+          "weight": 12,
+          "points": 4.44,
+          "why": "RSI 76.0, ROC 3.88%"
+        },
+        "volume": {
+          "value": 0.05,
+          "weight": 10,
+          "points": 0.5,
+          "why": "volume 0.05x baseline"
+        },
+        "order_book": {
+          "value": 0.5,
+          "weight": 8,
+          "points": 4.0,
+          "why": "mark sits 50% toward ask"
+        },
+        "liquidity": {
+          "value": 1.0,
+          "weight": 8,
+          "points": 8.0,
+          "why": "spread 1.86% at structural floor"
+        },
+        "relative_strength": {
+          "value": 0.0,
+          "weight": 7,
+          "points": 0.0,
+          "why": "1h ROC +3.88% vs peers +7.38%"
+        }
+      },
+      "penalties": {
+        "spread": {
+          "points": -0.0,
+          "why": "spread 1.86%"
+        },
+        "volatility": {
+          "points": -0.0,
+          "why": "ATR 0.75% normal"
+        },
+        "news_event": {
+          "points": -0.0,
+          "why": "no news adapter"
+        }
+      },
+      "approved": false,
+      "veto": "score 63.9 [WATCH] -- only HIGH_CONVICTION trades until thresholds are calibrated",
+      "vetoes": [
+        {
+          "rule": "score_threshold",
+          "reason": "score 63.9 [WATCH] -- only HIGH_CONVICTION trades until thresholds are calibrated"
+        }
+      ],
+      "plan": null,
+      "position": null
+    },
+    "DOGE-USD": {
+      "pair": "DOGE-USD",
+      "price": 0.08947185,
+      "quote": {
+        "bid": 0.08861567,
+        "ask": 0.09032803,
+        "mark": 0.08947185,
+        "spread_pct": 1.9138533516407783,
+        "open_price": 0.082775095,
+        "updated_at": "2026-09-03T12:46:40.254-04:00"
+      },
+      "regime": "BREAKOUT",
+      "regime_why": "at range high on 2.7x volume",
+      "agreement": 1.0,
+      "policy": {
+        "allow_long": true,
+        "strategy": "breakout_confirmation",
+        "size_mult": 0.75
+      },
+      "timeframes": {
+        "5m": {
+          "trend": "UP",
+          "structure": "UPTREND",
+          "rsi14": 66.48721738329142,
+          "atr_pct": 0.6290629715985578,
+          "volume_ratio": 0.048368807093475304,
+          "close": 0.08934,
+          "regime": "TRENDING_UP"
+        },
+        "15m": {
+          "trend": "UP",
+          "structure": "UPTREND",
+          "rsi14": 82.24622986574641,
+          "atr_pct": 0.9243384578280824,
+          "volume_ratio": 1.4703008304791116,
+          "close": 0.08924,
+          "regime": "TRENDING_UP"
+        },
+        "1h": {
+          "trend": "UP",
+          "structure": "UPTREND",
+          "rsi14": 82.75684133814883,
+          "atr_pct": 1.2952943562027313,
+          "volume_ratio": 2.157996395212986,
+          "close": 0.08904,
+          "regime": "TRENDING_UP"
+        },
+        "4h": {
+          "trend": "DOWN",
+          "structure": "UNKNOWN",
+          "rsi14": 75.61726803404514,
+          "atr_pct": 1.9775669780796215,
+          "volume_ratio": 2.7468703076885324,
+          "close": 0.08918,
+          "regime": "BREAKOUT"
+        }
+      },
+      "score": 72.7,
+      "band": "GOOD",
+      "reason": "score 73",
+      "factors": {
+        "regime": {
+          "value": 0.85,
+          "weight": 20,
+          "points": 17.0,
+          "why": "BREAKOUT permits longs (x0.75)"
+        },
+        "multi_timeframe_agreement": {
+          "value": 1.0,
+          "weight": 20,
+          "points": 20.0,
+          "why": "agreement +1.00"
+        },
+        "trend": {
+          "value": 0.6,
+          "weight": 15,
+          "points": 9.0,
+          "why": "5m:UP, 15m:UP, 1h:UP, 4h:DOWN"
+        },
+        "momentum": {
+          "value": 0.37,
+          "weight": 12,
+          "points": 4.44,
+          "why": "RSI 82.8, ROC 7.38%"
+        },
+        "volume": {
+          "value": 0.8,
+          "weight": 10,
+          "points": 8.0,
+          "why": "volume 1.47x baseline"
+        },
+        "order_book": {
+          "value": 0.5,
+          "weight": 8,
+          "points": 4.0,
+          "why": "mark sits 50% toward ask"
+        },
+        "liquidity": {
+          "value": 1.0,
+          "weight": 8,
+          "points": 8.0,
+          "why": "spread 1.91% at structural floor"
+        },
+        "relative_strength": {
+          "value": 1.0,
+          "weight": 7,
+          "points": 7.0,
+          "why": "1h ROC +7.38% vs peers +3.88%"
+        }
+      },
+      "penalties": {
+        "spread": {
+          "points": -2.77,
+          "why": "spread 1.91%"
+        },
+        "volatility": {
+          "points": -1.97,
+          "why": "ATR 1.30% elevated"
+        },
+        "news_event": {
+          "points": -0.0,
+          "why": "no news adapter"
+        }
+      },
+      "approved": false,
+      "veto": "score 72.7 [GOOD] -- only HIGH_CONVICTION trades until thresholds are calibrated",
+      "vetoes": [
+        {
+          "rule": "score_threshold",
+          "reason": "score 72.7 [GOOD] -- only HIGH_CONVICTION trades until thresholds are calibrated"
+        }
+      ],
+      "plan": null,
+      "position": null
+    }
+  },
+  "health": {
+    "generated_at": "2026-09-03T16:46:42.408660+00:00",
+    "robinhood_ok": true,
+    "market_data_ok": true,
+    "data_age_seconds": 102,
+    "price_disagreement_pct": 0.148,
+    "assets_ok": [
+      "BTC-USD",
+      "DOGE-USD"
+    ],
+    "_disagreement_doc": "Coinbase vs Robinhood. ~1.9% is EXPECTED here -- that is the spread, not an error."
+  },
+  "buying_power": 249.83,
+  "positions": {},
+  "execution": {
+    "enabled": false,
+    "acted": false,
+    "candidate": null,
+    "preview": null,
+    "note": null
+  },
+  "venue_cost_pct": 1.9
+}

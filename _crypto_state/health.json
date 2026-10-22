@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-09-03T16:46:42.408660+00:00",
+  "robinhood_ok": true,
+  "market_data_ok": true,
+  "data_age_seconds": 102,
+  "price_disagreement_pct": 0.148,
+  "assets_ok": [
+    "BTC-USD",
+    "DOGE-USD"
+  ],
+  "_disagreement_doc": "Coinbase vs Robinhood. ~1.9% is EXPECTED here -- that is the spread, not an error."
+}

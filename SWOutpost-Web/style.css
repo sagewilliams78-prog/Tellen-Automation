@@ -1,0 +1,529 @@
+/* Outpost Command — a tactical holo-console. Deliberately single-theme:
+   this is a cockpit display, not a document, so it always renders dark. */
+:root {
+  --ink: #0a0e18;
+  --panel: #10172a;
+  --panel-edge: #2c3e64;
+  --steel: #9bb0d6;
+  --signal: #ffb545;
+  --signal-dim: #a87530;
+  --verdant: #49d9a0;
+  --danger: #ff5b54;
+  --text: #e6ecf9;
+  --text-dim: #8293ba;
+  --grid-line: #192744;
+  --ground: #0c1120;
+
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  user-select: none;
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  background: var(--ground);
+}
+
+/* ambient console texture: faint scanlines + vignette, layered over the canvas */
+#game::after { content: none; }
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* corner targeting brackets, framing the whole viewport */
+.frame { position: fixed; inset: 0; pointer-events: none; z-index: 6; }
+.bracket {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border: 2px solid var(--signal-dim);
+  opacity: 0.55;
+}
+.bracket.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.bracket.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.bracket.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.bracket.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+/* ---- HUD: top console strip --------------------------------------- */
+#hud {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 18px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hud-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(16, 23, 42, 0.82);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 6px 14px 6px 18px;
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+}
+.hud-title-text { display: flex; flex-direction: column; justify-content: center; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.planet-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  color: var(--text);
+}
+.view-toggle {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 2px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: border-color 0.12s, color 0.12s;
+}
+.view-toggle:hover { border-color: var(--signal); color: var(--signal); }
+.view-toggle.active { border-color: var(--verdant); color: var(--verdant); }
+.view-toggle.armed { border-color: var(--danger); color: #ffb3af; background: #2a1414; }
+
+.victory-tag {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #0a0e18;
+  background: var(--verdant);
+  border-radius: 2px;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+.victory-tag.hidden { display: none; }
+
+.gauges {
+  display: flex;
+  gap: 2px;
+  background: rgba(16, 23, 42, 0.82);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 6px 4px;
+  backdrop-filter: blur(6px);
+}
+
+.gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 2px 16px;
+  border-left: 1px solid var(--grid-line);
+  min-width: 108px;
+}
+.gauge:first-child { border-left: none; }
+
+.g-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.g-value {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.25;
+}
+.gauge[data-res="credits"] .g-value { color: var(--signal); }
+.gauge[data-res="durasteel"] .g-value { color: var(--steel); }
+.gauge[data-res="fuel"] .g-value { color: var(--verdant); }
+.gauge.warning .g-value { color: var(--danger); animation: fuel-pulse 1.1s ease-in-out infinite; }
+@keyframes fuel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+.gauge[data-res="population"] .g-value { color: #c9d3ec; }
+.gauge[data-res="troopers"] .g-value { color: var(--danger); }
+.g-cap { font-size: 13px; color: var(--text-dim); margin-left: 1px; }
+
+/* ---- Raid warning banner -------------------------------------------- */
+#raidBanner {
+  position: fixed;
+  top: 94px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(50, 14, 14, 0.9);
+  border: 1px solid var(--danger);
+  border-radius: 3px;
+  padding: 8px 18px;
+  z-index: 12;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffd9d6;
+  animation: raid-pulse 1.1s ease-in-out infinite;
+}
+#raidBanner.hidden { display: none; }
+.raid-label { font-weight: 600; color: var(--danger); }
+#raidTimer { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.raid-strength { color: #ffbdb8; }
+@keyframes raid-pulse {
+  0%, 100% { box-shadow: 0 0 0 rgba(255, 91, 84, 0); }
+  50% { box-shadow: 0 0 16px rgba(255, 91, 84, 0.45); }
+}
+
+/* ---- Side panels ------------------------------------------------------ */
+.side-panel {
+  position: fixed;
+  top: 100px;
+  width: 190px;
+  background: rgba(16, 23, 42, 0.86);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 12px 14px 14px;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+.side-panel.left { left: 20px; }
+.side-panel.right { right: 20px; }
+.side-panel.hidden { display: none; }
+
+.panel-title {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--grid-line);
+  padding-bottom: 7px;
+  margin-bottom: 9px;
+}
+
+.panel-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12.5px;
+  margin-bottom: 6px;
+  color: var(--text-dim);
+}
+.panel-row .mono { font-family: var(--font-mono); color: var(--text); font-variant-numeric: tabular-nums; }
+
+.panel-btn {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 6px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: border-color 0.12s;
+}
+.panel-btn:hover:not(:disabled) { border-color: var(--signal); }
+.panel-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.panel-btn-cost { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); font-weight: 400; }
+
+.queue-bar {
+  height: 4px;
+  background: var(--grid-line);
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.queue-bar.hidden { display: none; }
+.queue-fill { height: 100%; width: 0%; background: var(--signal); }
+
+.panel-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.tech {
+  border: 1px solid var(--panel-edge);
+  border-radius: 2px;
+  padding: 7px 9px;
+  margin-bottom: 7px;
+  background: var(--panel);
+}
+.tech:last-child { margin-bottom: 0; }
+.tech-name { font-size: 12px; font-weight: 600; }
+.tech-desc { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; line-height: 1.35; }
+.tech-cost { font-family: var(--font-mono); font-size: 9.5px; color: var(--text-dim); margin-top: 4px; }
+.tech-btn {
+  width: 100%;
+  margin-top: 6px;
+  background: var(--ink);
+  border: 1px solid var(--panel-edge);
+  border-radius: 2px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px;
+  cursor: pointer;
+}
+.tech-btn:hover:not(:disabled) { border-color: var(--signal); }
+.tech-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tech-btn.done { border-color: var(--verdant); color: var(--verdant); cursor: default; }
+.tech-bar { height: 3px; background: var(--grid-line); border-radius: 2px; margin-top: 6px; overflow: hidden; }
+.tech-bar-fill { height: 100%; background: var(--verdant); width: 0%; }
+
+/* ---- Galaxy panel ------------------------------------------------------ */
+.planet-info-name { font-family: var(--font-display); font-weight: 700; font-size: 19px; }
+.planet-info-owner { font-size: 11px; margin-top: 2px; }
+.planet-info-stat { display: flex; justify-content: space-between; font-size: 12px; margin-top: 8px; color: var(--text-dim); }
+.planet-info-stat .mono { font-family: var(--font-mono); color: var(--text); }
+.attack-btn {
+  width: 100%;
+  margin-top: 10px;
+  background: var(--panel);
+  border: 1px solid var(--danger);
+  color: #ffb3af;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.attack-btn:hover:not(:disabled) { background: #2a1414; }
+.attack-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---- Toast -------------------------------------------------------------- */
+#toast {
+  position: fixed;
+  bottom: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 14, 24, 0.95);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  z-index: 15;
+  transition: opacity 0.4s;
+}
+#toast.hidden { display: none; }
+#toast.win { border-color: var(--verdant); color: var(--verdant); }
+#toast.lose { border-color: var(--danger); color: #ffb3af; }
+
+/* ---- Game over overlay -------------------------------------------------- */
+#gameOverOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, rgba(42, 10, 10, 0.55) 0%, rgba(5, 7, 13, 0.92) 70%);
+  backdrop-filter: blur(3px);
+}
+#gameOverOverlay.hidden { display: none; }
+.game-over-box {
+  width: 340px;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--danger);
+  border-radius: 3px;
+  padding: 28px 26px;
+  box-shadow: 0 0 40px rgba(255, 91, 84, 0.18);
+}
+.game-over-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 30px;
+  letter-spacing: 0.02em;
+  color: #ffb3af;
+}
+.game-over-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.rebuild-btn { margin-top: 18px; }
+
+/* ---- Build dock: bottom console strip ------------------------------ */
+#buildDock {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(16, 23, 42, 0.88);
+  border: 1px solid var(--panel-edge);
+  border-radius: 3px;
+  padding: 10px 16px;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+}
+
+.dock-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding-right: 2px;
+}
+
+#buildDock.hidden { display: none; }
+#buildMenu { display: flex; gap: 6px; }
+
+.build-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 92px;
+  padding: 10px 6px 8px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 2px;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, transform 0.12s;
+}
+.build-btn:hover { border-color: var(--signal); transform: translateY(-2px); }
+.build-btn.active { border-color: var(--signal); background: #1b2746; }
+.build-btn.active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--signal);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 181, 69, 0.35) inset;
+  pointer-events: none;
+}
+
+.build-btn .key {
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-dim);
+}
+.build-btn .swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  margin-top: 6px;
+  position: relative;
+}
+.build-btn[data-key="refinery"] .swatch { clip-path: polygon(25% 3%, 75% 3%, 100% 50%, 75% 97%, 25% 97%, 0% 50%); }
+.build-btn[data-key="fuelDepot"] .swatch { border-radius: 50% 50% 50% 4px; transform: rotate(45deg); }
+.build-btn[data-key="habitat"] .swatch { border-radius: 50% 50% 3px 3px / 65% 65% 3px 3px; }
+.build-btn[data-key="barracks"] .swatch { clip-path: polygon(50% 0%, 90% 25%, 78% 100%, 22% 100%, 10% 25%); }
+.build-btn[data-key="turret"] .swatch,
+.build-btn[data-key="shieldGenerator"] .swatch {
+  border-radius: 50%;
+  background: transparent !important;
+  border: 4px solid var(--steel);
+}
+.build-btn[data-key="shieldGenerator"] .swatch { border-color: #4ab0ff; }
+.build-btn[data-key="workshop"] .swatch { border-radius: 50%; border: 2px dashed #0a0e18; background-clip: padding-box; }
+.build-btn[data-key="landingPad"] .swatch { border-radius: 50%; }
+.build-btn[data-key="landingPad"] .swatch::before,
+.build-btn[data-key="landingPad"] .swatch::after {
+  content: "";
+  position: absolute;
+  background: #0a0e18;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.build-btn[data-key="landingPad"] .swatch::before { width: 3px; height: 12px; }
+.build-btn[data-key="landingPad"] .swatch::after { width: 12px; height: 3px; }
+.build-btn .name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 11.5px;
+  margin-top: 7px;
+  text-align: center;
+}
+.build-btn .cost {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  margin-top: 3px;
+  font-size: 9.5px;
+  text-align: center;
+}
+
+#tooltip {
+  position: fixed;
+  padding: 7px 11px;
+  background: rgba(8, 11, 20, 0.96);
+  border: 1px solid var(--panel-edge);
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 20;
+  max-width: 220px;
+}
+#tooltip.hidden { display: none; }

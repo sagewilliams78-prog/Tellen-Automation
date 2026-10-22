@@ -1,0 +1,5 @@
+{
+  "risk_per_trade_dollars": 4.95,
+  "max_notional_per_trade": 200.0,
+  "_doc": "Set 2026-09-02: fewer, larger trades, 2 concurrent positions. NOTE 4.95 not 5.00 -- slots = BP // (risk/0.04), so $5.00 needs $125/slot and BP $249.83 clears only ONE. $4.95 needs $123.75 and clears two, with headroom down to BP $247.50. If BP falls below that Eva silently drops to 1 slot, so re-check this number after any withdrawal or a losing stretch. Measured at $250 over 96 sessions/3 splits: net $19.79 vs $23.54 at $2.50, PF 1.24 vs 1.47, green 42% vs 46%, worst day -$10.06 vs -$5.29. Revert: 2.50 / 150.0, then restart."
+}

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "crown-preview",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd '/private/tmp/claude-501/-Users-sagewilliams-Desktop-Sages-trading-bot/06041a59-ae5c-4af5-b0d0-469848d11f0c/scratchpad' && exec python3 -m http.server 8777"
+      ],
+      "port": 8777
+    },
+    {
+      "name": "hq-dashboard",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": [
+        "-c",
+        "cd '/Users/sagewilliams/Desktop/Sages trading bot' && exec python3 dashboard_server.py"
+      ],
+      "port": 8420
+    }
+  ]
+}

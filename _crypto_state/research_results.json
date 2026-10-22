@@ -1,0 +1,365 @@
+{
+  "generated_at": "2026-09-01T19:05:33.080279+00:00",
+  "venue_cost_pct": 1.9,
+  "breakeven_reference": {
+    "10%/-3%": 37.7,
+    "5%/-3%": 61.3,
+    "12%/-4%": 36.9
+  },
+  "journal": {
+    "BTC-USD": {
+      "decisions": 49,
+      "score_min": 28.5,
+      "score_max": 38.4,
+      "score_mean": 32.7,
+      "score_p90": 36.3,
+      "regimes": {
+        "TRENDING_DOWN": 49
+      },
+      "top_vetoes": {
+        "score 33.2 [NO_TRADE]": 6,
+        "score 30.7 [NO_TRADE]": 4,
+        "score 33.3 [NO_TRADE]": 3
+      }
+    },
+    "DOGE-USD": {
+      "decisions": 49,
+      "score_min": 18.2,
+      "score_max": 28.5,
+      "score_mean": 22.5,
+      "score_p90": 27.9,
+      "regimes": {
+        "TRENDING_DOWN": 49
+      },
+      "top_vetoes": {
+        "score 22.7 [NO_TRADE]": 5,
+        "score 20.2 [NO_TRADE]": 4,
+        "score 23.1 [NO_TRADE]": 4
+      }
+    }
+  },
+  "backtests": {
+    "BTC-USD|6h": {
+      "bars": 350,
+      "strategies": {
+        "bollinger_reversion": {
+          "folds": [
+            {
+              "fold": 0,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": null
+        },
+        "trend_pullback": {
+          "folds": [
+            {
+              "fold": 0,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": null
+        }
+      }
+    },
+    "BTC-USD|1d": {
+      "bars": 350,
+      "strategies": {
+        "bollinger_reversion": {
+          "folds": [
+            {
+              "fold": 0,
+              "chosen_params": {
+                "bb_length": 20,
+                "bb_mult": 2.0,
+                "rsi_max": 45,
+                "target_pct": 10,
+                "stop_pct": -3
+              },
+              "in_sample": {
+                "trades": 3,
+                "expectancy_pct": -1.703,
+                "total_pct": -5.11,
+                "profit_factor": 0.657,
+                "win_rate_pct": 33.3,
+                "avg_win_pct": 9.79,
+                "avg_loss_pct": -7.45,
+                "best_pct": 9.79,
+                "worst_pct": -8.76,
+                "max_drawdown_pct": -8.76,
+                "sharpe_like": -0.208,
+                "sortino_like": -1.295,
+                "_doc": "expectancy_pct is per-trade NET of venue cost. profit_factor > 1 means gross wins exceed gross losses."
+              },
+              "out_of_sample": {
+                "trades": 1,
+                "expectancy_pct": -6.134,
+                "total_pct": -6.13,
+                "profit_factor": 0.0,
+                "win_rate_pct": 0.0,
+                "avg_win_pct": 0.0,
+                "avg_loss_pct": -6.13,
+                "best_pct": -6.13,
+                "worst_pct": -6.13,
+                "max_drawdown_pct": -6.13,
+                "sharpe_like": null,
+                "sortino_like": null,
+                "_doc": "expectancy_pct is per-trade NET of venue cost. profit_factor > 1 means gross wins exceed gross losses."
+              }
+            },
+            {
+              "fold": 1,
+              "chosen_params": {
+                "bb_length": 20,
+                "bb_mult": 2.0,
+                "rsi_max": 45,
+                "target_pct": 10,
+                "stop_pct": -3
+              },
+              "in_sample": {
+                "trades": 3,
+                "expectancy_pct": -1.117,
+                "total_pct": -3.35,
+                "profit_factor": 0.742,
+                "win_rate_pct": 33.3,
+                "avg_win_pct": 9.65,
+                "avg_loss_pct": -6.5,
+                "best_pct": 9.65,
+                "worst_pct": -6.87,
+                "max_drawdown_pct": -13.0,
+                "sharpe_like": -0.147,
+                "sortino_like": -3.05,
+                "_doc": "expectancy_pct is per-trade NET of venue cost. profit_factor > 1 means gross wins exceed gross losses."
+              },
+              "out_of_sample": {
+                "trades": 0,
+                "note": "no trades generated"
+              }
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": {
+            "folds_measured": 1,
+            "total_oos_trades": 1,
+            "mean_oos_expectancy_pct": -6.134,
+            "oos_total_pct": -6.13,
+            "folds_profitable": 0
+          }
+        },
+        "trend_pullback": {
+          "folds": [
+            {
+              "fold": 0,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": null
+        }
+      }
+    },
+    "DOGE-USD|6h": {
+      "bars": 350,
+      "strategies": {
+        "bollinger_reversion": {
+          "folds": [
+            {
+              "fold": 0,
+              "chosen_params": {
+                "bb_length": 20,
+                "bb_mult": 2.5,
+                "rsi_max": 40,
+                "target_pct": 10,
+                "stop_pct": -3
+              },
+              "in_sample": {
+                "trades": 4,
+                "expectancy_pct": -1.308,
+                "total_pct": -5.23,
+                "profit_factor": 0.654,
+                "win_rate_pct": 50.0,
+                "avg_win_pct": 4.93,
+                "avg_loss_pct": -7.55,
+                "best_pct": 9.06,
+                "worst_pct": -9.65,
+                "max_drawdown_pct": -15.1,
+                "sharpe_like": -0.186,
+                "sortino_like": -0.623,
+                "_doc": "expectancy_pct is per-trade NET of venue cost. profit_factor > 1 means gross wins exceed gross losses."
+              },
+              "out_of_sample": {
+                "trades": 0,
+                "note": "no trades generated"
+              }
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": null
+        },
+        "trend_pullback": {
+          "folds": [
+            {
+              "fold": 0,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": null
+        }
+      }
+    },
+    "DOGE-USD|1d": {
+      "bars": 350,
+      "strategies": {
+        "bollinger_reversion": {
+          "folds": [
+            {
+              "fold": 0,
+              "chosen_params": {
+                "bb_length": 20,
+                "bb_mult": 2.0,
+                "rsi_max": 45,
+                "target_pct": 10,
+                "stop_pct": -3
+              },
+              "in_sample": {
+                "trades": 7,
+                "expectancy_pct": -4.126,
+                "total_pct": -28.88,
+                "profit_factor": 0.259,
+                "win_rate_pct": 14.3,
+                "avg_win_pct": 10.07,
+                "avg_loss_pct": -6.49,
+                "best_pct": 10.07,
+                "worst_pct": -8.45,
+                "max_drawdown_pct": -29.11,
+                "sharpe_like": -0.689,
+                "sortino_like": -2.557,
+                "_doc": "expectancy_pct is per-trade NET of venue cost. profit_factor > 1 means gross wins exceed gross losses."
+              },
+              "out_of_sample": {
+                "trades": 1,
+                "expectancy_pct": -3.699,
+                "total_pct": -3.7,
+                "profit_factor": 0.0,
+                "win_rate_pct": 0.0,
+                "avg_win_pct": 0.0,
+                "avg_loss_pct": -3.7,
+                "best_pct": -3.7,
+                "worst_pct": -3.7,
+                "max_drawdown_pct": -3.7,
+                "sharpe_like": null,
+                "sortino_like": null,
+                "_doc": "expectancy_pct is per-trade NET of venue cost. profit_factor > 1 means gross wins exceed gross losses."
+              }
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": {
+            "folds_measured": 1,
+            "total_oos_trades": 1,
+            "mean_oos_expectancy_pct": -3.699,
+            "oos_total_pct": -3.7,
+            "folds_profitable": 0
+          }
+        },
+        "trend_pullback": {
+          "folds": [
+            {
+              "fold": 0,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 1,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 2,
+              "note": "no parameter set produced >=3 trades"
+            },
+            {
+              "fold": 3,
+              "note": "no parameter set produced >=3 trades"
+            }
+          ],
+          "aggregate_out_of_sample": null
+        }
+      }
+    }
+  }
+}

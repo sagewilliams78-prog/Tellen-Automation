@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Eva's Trading HQ — Smallville</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { --ink:#12100d; --panel:#1c1712; --line:#3a3128; --paper:#fdfaf3; --dim:#a89c88; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--ink); color: var(--paper);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+
+  /* the world occupies the screen; chrome is a thin bar, not a dashboard */
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    padding: 9px 14px; background: var(--panel); border-bottom: 2px solid var(--line);
+    flex-shrink: 0;
+  }
+  .brand { display: flex; align-items: baseline; gap: 11px; min-width: 0; }
+  h1 { font-size: 14px; margin: 0; letter-spacing: .12em; text-transform: uppercase; }
+  .sub { font-size: 11px; color: var(--dim); white-space: nowrap;
+         overflow: hidden; text-overflow: ellipsis; }
+  .tools { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+  a.link, button {
+    font: inherit; font-size: 11px; color: var(--paper); background: #2a231b;
+    border: 2px solid var(--line); padding: 6px 11px; cursor: pointer;
+    text-decoration: none; letter-spacing: .04em;
+  }
+  a.link:hover, button:hover { background: #3a3128; }
+  .zoom { font-size: 11px; color: var(--dim); min-width: 30px; text-align: center; }
+
+  /* ---- mission-control wall display: always visible, no click required.
+     Situational awareness in ~3 seconds -- the individual desks still give
+     detail, this gives the whole picture at a glance. Every cell reads a
+     real field; nothing here is decorative. ---- */
+  #wallDisplay {
+    display: flex; gap: 0; background: #171310; border-bottom: 2px solid var(--line);
+    flex-shrink: 0; overflow-x: auto;
+  }
+  .wcell {
+    padding: 7px 16px; border-right: 1px solid var(--line); white-space: nowrap;
+    display: flex; flex-direction: column; gap: 2px; min-width: 92px;
+  }
+  .wcell .wl { font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: var(--dim); }
+  .wcell .wv { font-size: 14px; font-weight: 700; }
+  .wcell .wv.ok { color: #4fbf6a; }
+  .wcell .wv.warn { color: #e8c15a; }
+  .wcell .wv.alert { color: #e0503c; }
+  .wcell .wv.idle { color: var(--dim); }
+
+  /* ---- live trades ticker: one persistent, always-visible line for
+     "what's happening right now" -- no click, no 30-min wait, no missing
+     the 2.6s floating +$ effect on the map. Priority, real, every poll:
+     1) a symbol's entry_flag is up right now (live BUY signal) 2) the most
+     recent real trade this session actually saw open/close 3) a quiet
+     "watching" idle state. See main.js's updateLiveTicker(). ---- */
+  #liveTicker {
+    display: flex; align-items: center; gap: 9px; padding: 7px 16px;
+    background: #171310; border-bottom: 2px solid var(--line); flex-shrink: 0;
+    font-size: 12px;
+  }
+  #liveTicker .lt-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--dim); flex-shrink: 0;
+  }
+  #liveTicker .lt-text { color: var(--paper); }
+  #liveTicker.entering .lt-dot { background: #e8c15a; box-shadow: 0 0 8px #e8c15a; animation: nbBreakingBlink 0.6s steps(1) infinite; }
+  #liveTicker.entering .lt-text { color: #e8c15a; font-weight: 700; }
+  #liveTicker.gain .lt-dot { background: #4fbf6a; box-shadow: 0 0 6px #4fbf6a; }
+  #liveTicker.gain .lt-text { color: #4fbf6a; }
+  #liveTicker.loss .lt-dot { background: #e0503c; box-shadow: 0 0 6px #e0503c; }
+  #liveTicker.loss .lt-text { color: #e0503c; }
+  #liveTicker.flash { animation: liveTickerFlash 1.2s ease-in-out 2; }
+  @keyframes liveTickerFlash {
+    0%, 100% { background: #171310; } 50% { background: #2a2318; }
+  }
+
+  /* ---- incident banner: hidden unless something REAL is actually wrong.
+     Reasons come straight from bot_alive / mechanics / weekly_status --
+     see store.js's incidentState(). ---- */
+  #incidentBanner {
+    display: none; align-items: center; gap: 10px; padding: 8px 16px;
+    background: #3a1210; border-bottom: 2px solid #e0503c; color: #ffb3ab;
+    font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0;
+    animation: incidentPulse 1.6s ease-in-out infinite;
+  }
+  #incidentBanner.active { display: flex; }
+  #incidentBanner .ib-dot {
+    width: 9px; height: 9px; border-radius: 50%; background: #e0503c; flex-shrink: 0;
+  }
+  #incidentBanner .ib-text { flex: 1; }
+  #incidentBanner .ib-hint { font-weight: 400; color: #d9958f; font-size: 10.5px; }
+  @keyframes incidentPulse {
+    0%, 100% { background: #3a1210; } 50% { background: #4a1815; }
+  }
+
+  /* ---- news bulletin: pops up top-right (north) corner every 30 min.
+     Bull & Bear are fictional anchors reading REAL numbers -- see
+     ui/newsbulletin.js. Collapses to a small tab; click to reopen. ---- */
+  #newsBulletin { position: fixed; top: 10px; right: 10px; z-index: 30; }
+  #newsBulletin .nb-tab {
+    display: none; align-items: center; gap: 6px; cursor: pointer;
+    background: var(--panel); border: 2px solid var(--line); padding: 6px 11px;
+    font-size: 11px; letter-spacing: .04em; color: var(--paper);
+  }
+  #newsBulletin .nb-tab:hover { background: #2a231b; }
+  #newsBulletin .nb-ago { color: var(--dim); font-size: 10px; }
+  #newsBulletin.collapsed .nb-tab { display: flex; }
+  #newsBulletin.collapsed .nb-card { display: none; }
+  #newsBulletin .nb-card {
+    width: 300px; max-width: 86vw;
+    /* the broadcast set: a studio-lit gradient behind the anchors, not a
+       flat panel -- see the ::before glow + scanlines below. */
+    background: linear-gradient(180deg, #1b1730 0%, #201a14 55%, #14100c 100%);
+    border: 2px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.5);
+    position: relative; overflow: hidden;
+  }
+  #newsBulletin .nb-card::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 140% 55% at 50% 0%, rgba(120,140,255,.16), transparent 62%),
+      repeating-linear-gradient(180deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 3px);
+  }
+  #newsBulletin .nb-head, #newsBulletin .nb-body, #newsBulletin .nb-foot, #newsBulletin .nb-breaking {
+    position: relative; z-index: 1;
+  }
+  #newsBulletin .nb-card.sun { border-color: #e8c15a; }
+  #newsBulletin .nb-card.rain { border-color: #5a8fe0; }
+
+  /* ---- breaking-news cut-in: plays only when a genuinely new broadcast
+     airs (see newsbulletin.js's renderCard). A channel-switch moment, not
+     a per-poll animation -- nobody has to move for it to read as "live". */
+  #newsBulletin .nb-card.nb-entering {
+    animation: nbCardIn .38s cubic-bezier(.22,.85,.32,1.25) both,
+               nbFlicker .5s ease .38s both;
+  }
+  @keyframes nbCardIn {
+    0%   { opacity: 0; transform: translateY(-16px) scale(.90); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes nbFlicker {
+    0%, 100% { filter: brightness(1); }
+    15% { filter: brightness(2.2); }
+    30% { filter: brightness(.6); }
+    45% { filter: brightness(1.6); }
+    60% { filter: brightness(1); }
+  }
+  #newsBulletin .nb-breaking {
+    display: flex; align-items: center; justify-content: center; gap: 9px; overflow: hidden;
+    background: linear-gradient(90deg, #7a1f16, #e0503c, #7a1f16);
+    color: #fff; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    font-size: 11px; text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    box-shadow: 0 0 20px rgba(224,80,60,.75);
+    animation: nbBreakingFlash 1.5s ease forwards;
+  }
+  #newsBulletin .nb-breaking .dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #fff; flex-shrink: 0;
+    animation: nbBreakingBlink .35s steps(1) infinite;
+  }
+  @keyframes nbBreakingFlash {
+    0%   { opacity: 0; max-height: 0; padding: 0 10px; }
+    12%  { opacity: 1; max-height: 40px; padding: 8px 10px; }
+    78%  { opacity: 1; max-height: 40px; padding: 8px 10px; }
+    100% { opacity: 0; max-height: 0; padding: 0 10px; }
+  }
+  @keyframes nbBreakingBlink { 0%,49% { opacity: 1; } 50%,100% { opacity: .25; } }
+  #newsBulletin .nb-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 10px; border-bottom: 2px solid var(--line);
+  }
+  #newsBulletin .nb-title { font-size: 11px; font-weight: 700; letter-spacing: .03em; }
+  #newsBulletin .nb-onair {
+    display: flex; align-items: center; gap: 5px; font-size: 9px; font-weight: 800;
+    letter-spacing: .09em; color: #ff8478; flex-shrink: 0;
+  }
+  #newsBulletin .nb-onair .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: #ff3b30;
+    box-shadow: 0 0 6px #ff3b30; animation: nbBreakingBlink 1s steps(1) infinite;
+  }
+  #newsBulletin .nb-close { padding: 2px 8px; font-size: 12px; }
+  #newsBulletin .nb-body {
+    padding: 9px 10px; max-height: 46vh; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  /* the shared booth: both anchors sitting together at one desk, drawn once
+     per broadcast (see newsbulletin.js's boothSvg()) -- this is what makes
+     it read as "the same booth" rather than two separate cutaways. */
+  #newsBulletin .nb-booth {
+    border-bottom: 2px solid var(--line); line-height: 0;
+  }
+  #newsBulletin .nb-booth-svg { width: 100%; height: auto; display: block; }
+
+  #newsBulletin .nb-line { display: flex; gap: 8px; align-items: center; font-size: 11.5px; line-height: 1.4; }
+  #newsBulletin .nb-line.nb-bear { flex-direction: row-reverse; text-align: right; }
+  #newsBulletin .nb-line.nb-active .nb-bubble {
+    background: #3a2f1c; border-color: #e8c15a; box-shadow: 0 0 0 1px #e8c15a inset;
+  }
+  #newsBulletin .nb-line.nb-active .nb-tag { filter: brightness(1.3); }
+  /* compact speaker chip -- who's talking, in the transcript below the
+     shared booth. The booth above is the one shared portrait; this doesn't
+     need to repeat it. */
+  #newsBulletin .nb-tag {
+    flex-shrink: 0; font-size: 9px; font-weight: 800; letter-spacing: .06em;
+    padding: 3px 6px; border-radius: 3px; align-self: flex-start; margin-top: 1px;
+  }
+  #newsBulletin .nb-tag-bull { background: #3a2f1c; color: #e8c15a; box-shadow: 0 0 0 1px #e8c15a inset; }
+  #newsBulletin .nb-tag-bear { background: #1c2a3a; color: #7fb0ee; box-shadow: 0 0 0 1px #5a8fe0 inset; }
+  #newsBulletin .nb-bubble { background: #231c15; border: 1px solid var(--line); padding: 6px 9px; flex: 1; }
+  #newsBulletin .nb-emoji { margin-right: 5px; }
+  #newsBulletin .nb-foot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px; border-top: 1px solid var(--line); font-size: 9.5px; color: var(--dim);
+  }
+  #newsBulletin .nb-voice { padding: 2px 7px; font-size: 12px; }
+  @media (max-width: 560px) { #newsBulletin .nb-card { width: 88vw; } }
+
+  #stage { flex: 1; position: relative; min-height: 0; }
+  #hq { width: 100%; height: 100%; display: block; cursor: grab; }
+
+  /* ---- side panel: overlays the world, never shrinks it ---- */
+  #panel {
+    position: absolute; top: 0; right: 0; bottom: 0; width: 340px; max-width: 88vw;
+    background: rgba(22,18,14,.97); border-left: 2px solid var(--line);
+    transform: translateX(100%); transition: transform .18s ease;
+    display: flex; flex-direction: column; z-index: 5;
+  }
+  #panel.open { transform: none; }
+  .panel-head { padding: 13px 14px; border-bottom: 2px solid var(--line); flex-shrink: 0; }
+  .panel-head .t { display: flex; align-items: center; gap: 9px; }
+  #panelTitle { font-size: 14px; font-weight: 700; letter-spacing: .05em; }
+  #panelSub { font-size: 11px; color: var(--dim); margin-top: 3px; text-transform: uppercase; letter-spacing: .07em; }
+  #panelDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  #panelClose { margin-left: auto; padding: 3px 9px; }
+  #panelBody { padding: 13px 14px 22px; overflow-y: auto; font-size: 12px; line-height: 1.55; }
+  #panelBody h4 { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em;
+                  color: var(--dim); margin: 16px 0 7px; font-weight: 700; }
+  .lead { margin: 0 0 4px; color: #ded4c2; }
+  .rows { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .row { display: flex; justify-content: space-between; gap: 10px; padding: 6px 9px;
+         background: #1e1913; font-size: 11.5px; }
+  .row span { color: var(--dim); display: flex; align-items: center; gap: 6px; }
+  .row b { text-align: right; word-break: break-word; }
+  .row .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .hint { margin-top: 16px; font-size: 10px; color: #6f6558; }
+  /* a document row is clickable; the whole row lights up */
+  .row.doc-open { cursor: pointer; }
+  .row.doc-open:hover { background: #2a231b; }
+  /* the file itself: monospace, wrapped, scrollable, never markup */
+  .doc-text {
+    margin: 8px 0 0; padding: 10px; background: #14100c; border: 1px solid var(--line);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px; line-height: 1.5; color: #ded4c2;
+    white-space: pre-wrap; word-break: break-word;
+    max-height: 52vh; overflow-y: auto;
+  }
+  .hint code { color: #93867a; }
+  .muted { color: var(--dim); }
+  .chart-wrap { border: 1px solid var(--line); background: #1e1913; padding: 8px; }
+  .chart-wrap svg { display: block; width: 100%; height: auto; }
+  .filelink { text-decoration: underline; cursor: pointer; }
+  .filelink:hover { color: #fdfaf3; }
+
+  /* ---- activity log ---- */
+  #logPanel {
+    position: absolute; left: 10px; bottom: 10px; width: 330px; max-width: 60vw;
+    background: rgba(22,18,14,.95); border: 2px solid var(--line); z-index: 4;
+  }
+  #logPanel .lh { display: flex; align-items: center; justify-content: space-between;
+                  padding: 7px 11px; border-bottom: 2px solid var(--line); }
+  #logPanel .lh span { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+  #logToggle { padding: 2px 8px; font-size: 11px; }
+  #logList { max-height: 132px; overflow-y: auto; padding: 6px 0; }
+  #logPanel.collapsed #logList { display: none; }
+  .log-row { display: flex; align-items: center; gap: 9px; padding: 3px 11px; font-size: 11px; }
+  .log-row time { color: #7f7466; flex-shrink: 0; }
+  .log-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 4px currentColor; }
+  @media (max-width: 720px) { #logPanel { display: none; } }
+
+  footer {
+    padding: 7px 14px; background: var(--panel); border-top: 2px solid var(--line);
+    font-size: 11px; color: var(--dim); flex-shrink: 0;
+    display: flex; justify-content: space-between; gap: 14px;
+  }
+  .phase { color: #7fbf7f; }
+  @media (max-width: 720px) {
+    .sub, footer .right { display: none; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <h1>Eva's Trading HQ</h1>
+      <span class="sub" id="status">Loading…</span>
+    </div>
+    <div class="tools">
+      <button id="zoomOut" title="Zoom out">−</button>
+      <span class="zoom" id="zoomLevel">1×</span>
+      <button id="zoomIn" title="Zoom in">+</button>
+      <button id="fit" title="Fit to screen">Fit</button>
+      <button id="findMe" title="Center the camera on Sage">📍 Me</button>
+      <button id="previewCommute" title="Send the doctors, Otis and Margo driving -- the same trip they actually make at 09:00/16:00 ET, triggered early so you can watch it without waiting for market hours">🚗 Commute</button>
+      <a class="link" href="/town">Town</a>
+      <a class="link" href="/">Dashboard</a>
+    </div>
+  </header>
+
+  <div id="incidentBanner">
+    <span class="ib-dot"></span>
+    <span class="ib-text" id="incidentText">—</span>
+    <span class="ib-hint">click for details</span>
+  </div>
+
+  <div id="wallDisplay">
+    <div class="wcell"><span class="wl">Eva</span><span class="wv" id="wBot">—</span></div>
+    <div class="wcell"><span class="wl">Eligible</span><span class="wv" id="wEligible">—</span></div>
+    <div class="wcell"><span class="wl">Open</span><span class="wv" id="wOpen">—</span></div>
+    <div class="wcell"><span class="wl">Today's P&amp;L</span><span class="wv" id="wPnl">—</span></div>
+    <div class="wcell"><span class="wl">Risk</span><span class="wv" id="wRisk">—</span></div>
+    <div class="wcell"><span class="wl">Data</span><span class="wv" id="wFresh">—</span></div>
+  </div>
+
+  <div id="liveTicker">
+    <span class="lt-dot" id="ltDot"></span>
+    <span class="lt-text" id="ltText">Watching…</span>
+  </div>
+
+  <div id="newsBulletin" class="collapsed"></div>
+
+  <div id="stage">
+    <canvas id="hq"></canvas>
+
+    <aside id="logPanel">
+      <div class="lh"><span>City activity</span><button id="logToggle">−</button></div>
+      <div id="logList"></div>
+    </aside>
+
+    <aside id="panel" aria-live="polite">
+      <div class="panel-head">
+        <div class="t">
+          <span id="panelDot"></span>
+          <div>
+            <div id="panelTitle">—</div>
+            <div id="panelSub"></div>
+          </div>
+          <button id="panelClose">✕</button>
+        </div>
+      </div>
+      <div id="panelBody"></div>
+    </aside>
+  </div>
+
+  <footer>
+    <span id="roomReadout">Drag to pan · scroll to zoom · "📍 Me" finds Sage and the dogs</span>
+    <span class="right"><span class="phase">Unified city</span> — HQ, streets, homes &amp; park in one world. Read-only; the live bot is untouched.</span>
+  </footer>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

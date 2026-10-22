@@ -1,0 +1,307 @@
+{
+  "last_payday": "2026-10-01",
+  "paydays_run": 3,
+  "wallets": {
+    "sym0": 2800,
+    "sym1": 3520,
+    "sym2": 3000,
+    "sym3": 1850,
+    "sym4": 2550,
+    "sym5": 1970,
+    "sym6": 3340,
+    "eva": 2850,
+    "risk": 3080,
+    "mechanic": 2890,
+    "barista": 2300,
+    "archivist": 2480,
+    "writer": 2370,
+    "editor": 3400,
+    "atmops": 3780,
+    "doctor1": 2700,
+    "doctor2": 2450
+  },
+  "owned": {
+    "sym0": [
+      "rug",
+      "cat",
+      "bigtv"
+    ],
+    "sym1": [
+      "bookshelf",
+      "coffee"
+    ],
+    "sym2": [
+      "bicycle",
+      "bigtv"
+    ],
+    "sym3": [
+      "bigtv",
+      "dog",
+      "garden"
+    ],
+    "sym4": [
+      "bookshelf",
+      "houseplant",
+      "cat",
+      "garden"
+    ],
+    "sym5": [
+      "garden",
+      "houseplant",
+      "dog",
+      "bicycle"
+    ],
+    "sym6": [
+      "coffee",
+      "bicycle"
+    ],
+    "eva": [
+      "houseplant",
+      "bookshelf",
+      "rug",
+      "garden"
+    ],
+    "risk": [
+      "bookshelf",
+      "garden"
+    ],
+    "mechanic": [
+      "coffee",
+      "dog"
+    ],
+    "barista": [
+      "cat",
+      "rug",
+      "garden",
+      "bicycle"
+    ],
+    "archivist": [
+      "bookshelf",
+      "rug",
+      "cat",
+      "garden"
+    ],
+    "writer": [
+      "coffee",
+      "bookshelf",
+      "garden",
+      "cat"
+    ],
+    "editor": [
+      "bigtv"
+    ],
+    "atmops": [
+      "bookshelf"
+    ],
+    "doctor1": [
+      "garden",
+      "bigtv"
+    ],
+    "doctor2": [
+      "dog",
+      "garden"
+    ]
+  },
+  "log": [
+    {
+      "when": "2026-10-08T12:52:31.704864-07:00",
+      "text": "Payday \u2014 everyone received SV$1,000"
+    },
+    {
+      "when": "2026-09-01T00:00:02.593046-07:00",
+      "text": "Cy bought Bicycle for SV$400"
+    },
+    {
+      "when": "2026-09-01T00:00:02.593028-07:00",
+      "text": "Bear bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-09-01T00:00:02.592990-07:00",
+      "text": "Payday \u2014 everyone received SV$1,000"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024477-07:00",
+      "text": "Dr. Reyes bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024473-07:00",
+      "text": "Dr. Ahn bought Big television for SV$600"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024467-07:00",
+      "text": "Nell bought Cat for SV$450"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024464-07:00",
+      "text": "Nell bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024459-07:00",
+      "text": "Della bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024454-07:00",
+      "text": "Sal bought Bicycle for SV$400"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024451-07:00",
+      "text": "Sal bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024446-07:00",
+      "text": "Otis bought Dog for SV$850"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024441-07:00",
+      "text": "Eva bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024436-07:00",
+      "text": "Cy bought Dog for SV$850"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024431-07:00",
+      "text": "June bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024425-07:00",
+      "text": "Bear bought Dog for SV$850"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024384-07:00",
+      "text": "Rosa bought Big television for SV$600"
+    },
+    {
+      "when": "2026-08-26T17:29:40.024358-07:00",
+      "text": "Bonus for working hard \u2014 everyone received SV$1,000"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124718-07:00",
+      "text": "Dr. Reyes bought Dog for SV$850"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124712-07:00",
+      "text": "Dr. Ahn bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124709-07:00",
+      "text": "Wes bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124705-07:00",
+      "text": "Rafa bought Big television for SV$600"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124702-07:00",
+      "text": "Nell bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124698-07:00",
+      "text": "Nell bought Espresso machine for SV$260"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124695-07:00",
+      "text": "Della bought Cat for SV$450"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124692-07:00",
+      "text": "Della bought Good rug for SV$150"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124689-07:00",
+      "text": "Della bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124685-07:00",
+      "text": "Sal bought Good rug for SV$150"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124682-07:00",
+      "text": "Sal bought Cat for SV$450"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124679-07:00",
+      "text": "Otis bought Espresso machine for SV$260"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124675-07:00",
+      "text": "Margo bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124672-07:00",
+      "text": "Margo bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124669-07:00",
+      "text": "Eva bought Good rug for SV$150"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124665-07:00",
+      "text": "Eva bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124662-07:00",
+      "text": "Eva bought Houseplant for SV$80"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124659-07:00",
+      "text": "Wren bought Bicycle for SV$400"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124655-07:00",
+      "text": "Wren bought Espresso machine for SV$260"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124651-07:00",
+      "text": "Cy bought Houseplant for SV$80"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124648-07:00",
+      "text": "Cy bought Garden plot for SV$700"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124644-07:00",
+      "text": "June bought Cat for SV$450"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124641-07:00",
+      "text": "June bought Houseplant for SV$80"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124637-07:00",
+      "text": "June bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124633-07:00",
+      "text": "Bear bought Big television for SV$600"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124629-07:00",
+      "text": "Priya bought Big television for SV$600"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124625-07:00",
+      "text": "Priya bought Bicycle for SV$400"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124621-07:00",
+      "text": "Miles bought Espresso machine for SV$260"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124618-07:00",
+      "text": "Miles bought Bookshelf for SV$220"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124613-07:00",
+      "text": "Rosa bought Cat for SV$450"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124608-07:00",
+      "text": "Rosa bought Good rug for SV$150"
+    },
+    {
+      "when": "2026-08-26T17:11:40.124595-07:00",
+      "text": "Payday \u2014 everyone received SV$1,000"
+    }
+  ]
+}

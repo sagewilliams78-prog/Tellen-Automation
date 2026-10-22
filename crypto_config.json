@@ -1,0 +1,152 @@
+{
+  "_doc": "EVA CRYPTO v1 configuration. Every number here is either measured from the real market or deliberately chosen; nothing is a placeholder. Edit this file rather than any .py to change behaviour.",
+
+  "version": "1.0.0",
+  "phase": 1,
+  "_phase_doc": "Phase 1 = intelligence pipeline only. execution.enabled stays false until the pipeline is validated against real data AND the legacy crypto_btc_monitor.py desk is retired. Two systems must never trade this account at once.",
+
+  "account": {
+    "rhs_account_number": "724375969",
+    "_doc": "Numeric rhs_account_number -- crypto tools require this form, NOT the alphanumeric account_number."
+  },
+
+  "universe": {
+    "BTC-USD": {
+      "role": "primary_trend",
+      "enabled": true,
+      "min_notional_usd": 1.00
+    },
+    "DOGE-USD": {
+      "role": "high_volatility",
+      "enabled": true,
+      "min_notional_usd": 1.00,
+      "_doc": "DOGE's low unit price is NOT low risk. All sizing is dollars-at-risk; coin count is an output, never an input."
+    }
+  },
+  "_universe_doc": "ETH-USD and other Robinhood-supported pairs can be added here without touching strategy code.",
+
+  "execution_costs": {
+    "measured_spread_pct": {
+      "BTC-USD": 1.89,
+      "DOGE-USD": 1.90,
+      "ETH-USD": 1.89
+    },
+    "measured_at": "2026-09-01T11:05:18-07:00",
+    "_measurement_doc": "Measured live at 11:05 AM PDT -- peak US session, best liquidity of the day. All three assets landed within 0.01pp of each other, which means ~1.9% is STRUCTURAL (Robinhood's crypto revenue model), not a liquidity artifact. This is the single most important number in this file.",
+
+    "assumed_round_trip_cost_pct": 1.90,
+    "_cost_doc": "A round trip crosses the ask on entry and the bid on exit. Any target smaller than this is a guaranteed loss before the strategy has any say. This is why EVA Crypto must trade RARELY and hold for LARGE moves -- short scalping is arithmetically dead on this venue."
+  },
+
+  "timeframes": {
+    "tactical": "5m",
+    "confirmation": "15m",
+    "trend": "1h",
+    "regime": "4h",
+    "_doc": "Longer frames set context; shorter frames set timing. A bullish 5m against a bearish 4h scores low by design."
+  },
+
+  "trade_score": {
+    "thresholds": {
+      "no_trade": 49,
+      "watch": 69,
+      "good": 79,
+      "high_conviction": 80
+    },
+    "_threshold_doc": "PROVISIONAL and explicitly uncalibrated. The brief is right that these must be set by historical testing, not opinion. Until walk-forward validation exists, only high_conviction (80+) is permitted to trade, and only in Phase 2+.",
+    "weights": {
+      "regime": 20,
+      "multi_timeframe_agreement": 20,
+      "trend": 15,
+      "momentum": 12,
+      "volume": 10,
+      "order_book": 8,
+      "liquidity": 8,
+      "relative_strength": 7
+    },
+    "penalties": {
+      "spread_penalty_max": 40,
+      "volatility_penalty_max": 20,
+      "news_event_penalty_max": 100,
+      "_penalty_doc": "Penalties SUBTRACT from the weighted score. spread_penalty is large on purpose: on a 1.9% venue, spread is not a detail, it is the dominant cost. news_event can zero a score outright (hard veto)."
+    }
+  },
+
+  "risk": {
+    "max_risk_per_trade_usd": 2.00,
+    "max_notional_per_trade_usd": 60.00,
+    "max_total_crypto_exposure_usd": 60.00,
+    "max_concurrent_positions": 1,
+    "max_positions_per_asset": 1,
+
+    "_sizing_doc": "Sized down from the brief's defaults on 2026-09-01 for two real reasons. (1) SHARED BUYING POWER: crypto and equities draw on the SAME Robinhood account -- measured $178.44 available while Eva already holds ~$72 of MSFT. A $100 crypto position would starve the equity desk, which is the proven system. (2) UNPROVEN on a 1.9%-cost venue: risk stays small until walk-forward results exist. Raise these only after the strategy has real out-of-sample evidence, and only with the equity desk's needs accounted for.",
+
+    "daily_loss_limit_usd": -10.00,
+    "rolling_24h_loss_limit_usd": -15.00,
+    "weekly_drawdown_limit_usd": -30.00,
+    "_loss_limit_doc": "Tightened from -25/-35/-60. At $2 risk per trade these permit ~5 losing trades in a day before halting -- enough to learn something, small enough that a bad regime cannot compound. The account is ~$250 total; a -$30 week is >10% of it, which is already the outer edge of acceptable for an unvalidated system.",
+
+    "max_spread_pct": 2.10,
+    "_max_spread_doc": "Set just above the measured 1.89-1.90% structural floor. Tighter than this and EVA could never trade at all; looser and she is paying an abnormal, widened book. This gate catches DISLOCATION, not the normal toll.",
+
+    "min_target_pct": 8.00,
+    "_min_target_doc": "Hard floor, raised 4% -> 8% on 2026-09-01. Below 8% the breakeven win rate exceeds 44% purely from spread, which is not a bet worth taking on an uncalibrated strategy. A target must clear the ~1.9% round trip with real margin or the trade is refused before scoring even matters.",
+
+    "max_slippage_pct": 0.50,
+    "min_liquidity_usd": 10000.00,
+
+    "stale_data_seconds": 300,
+    "_stale_doc": "Lateness allowance BEYOND a bar's own 5-minute span, so the real tolerance is up to ~10 minutes of total bar age. Raised 120 -> 300 on 2026-09-01: Coinbase's candles endpoint lags enough that 120s flagged perfectly healthy data as stale and vetoed every trade. Still tight enough to catch a genuinely dead feed within two bars.",
+    "cooldown_after_loss_minutes": 60,
+    "cooldown_after_consecutive_losses": 3,
+    "cooldown_after_consecutive_losses_hours": 12,
+
+    "_no_martingale": "Never average down. Never increase size to recover a loss. Not configurable."
+  },
+
+  "position_management": {
+    "stop_loss_pct": -3.0,
+    "take_profit_pct": 10.0,
+    "trailing_stop_activate_pct": 6.0,
+    "trailing_stop_distance_pct": 2.5,
+    "max_hold_hours": 120,
+
+    "_target_doc": "Raised 5% -> 10% on 2026-09-01 after quantifying the real venue cost. At a 1.9% round-trip spread on a $100 position ($1.90), a 5%/3% trade nets +$3.10 on a win and -$4.90 on a loss: R:R 0.63 and a 61.3% BREAKEVEN win rate. The spread does not merely shave the edge, it inverts it. At 10%/3% the same trade nets +$8.10 vs -$4.90: R:R 1.65, breakeven 37.7% -- achievable. Do not lower this without redoing that arithmetic.",
+
+    "_hold_doc": "Raised 48h -> 120h with the target. A 10% BTC move is a multi-day event, not an intraday one. This is the honest consequence of the venue cost: EVA Crypto is a SWING system that holds for days, not a scalper. A 24/7 market does not mean fast trades -- on a 1.9% venue, fast trades are the one thing guaranteed to lose."
+  },
+
+  "data": {
+    "coinbase_rest": "https://api.exchange.coinbase.com",
+    "coinbase_ws": "wss://ws-feed.exchange.coinbase.com",
+    "coingecko_rest": "https://api.coingecko.com/api/v3",
+    "candle_granularity_seconds": {
+      "5m": 300,
+      "15m": 900,
+      "1h": 3600,
+      "4h": 14400
+    },
+    "max_price_disagreement_pct": 2.5,
+    "_disagreement_doc": "Coinbase (signals) vs Robinhood (execution) legitimately differ by about the spread. Beyond this, one feed is wrong and EVA must stop rather than trade on a bad price."
+  },
+
+  "execution": {
+    "enabled": false,
+    "_enabled_doc": "PHASE 1 GATE. false = analyse, score, preview, journal -- but never place. Flipping this true requires: (1) pipeline validated on real data, (2) walk-forward results, (3) crypto_btc_monitor.py retired so only one system trades, (4) explicit human decision.",
+    "require_preview": true,
+    "order_type": "limit",
+    "limit_at": "mark",
+    "_order_doc": "LIMIT at mark, never market. A market order hands over the full ~1.9% spread by definition."
+  },
+
+  "health": {
+    "heartbeat_seconds": 60,
+    "max_missed_heartbeats": 3,
+    "reconnect_backoff_seconds": [1, 2, 5, 15, 30, 60]
+  },
+
+  "accounting": {
+    "boundary_timezone": "America/Los_Angeles",
+    "_boundary_doc": "Midnight is a REPORTING boundary only. It never force-closes a position -- that is equity-market thinking and does not apply to a 24/7 asset."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "symbol": "SPY",
+  "ma_days": 200,
+  "cash_reserve_usd": 1.0,
+  "dry_run": false,
+  "min_order_usd": 5.0,
+  "_doc": "One rule: hold SPY above its 200-day average, sit in cash below it. Measured 2007-2026 on SPY/QQQ/IWM/DIA (4780 days, three bear markets, no symbol selection): roughly HALVES both drawdown and total return vs buy-and-hold. SPY hold +487.6%/maxDD -48.3% vs rule +255.8%/maxDD -20.9%. This is a RISK tool, not a return tool -- buy-and-hold beat it on total return in all four indexes. Change symbol to QQQ for more of both. dry_run true = decide and journal, place nothing."
+}
