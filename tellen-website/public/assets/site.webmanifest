@@ -1,0 +1,14 @@
+{
+  "name": "Tellen Automation",
+  "short_name": "Tellen",
+  "description": "AI receptionists, scheduling, lead qualification, follow-up and custom automation for service businesses.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050a12",
+  "theme_color": "#050b14",
+  "icons": [
+    { "src": "/assets/favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
