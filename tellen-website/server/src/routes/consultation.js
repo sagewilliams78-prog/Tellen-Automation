@@ -27,9 +27,11 @@ async function forwardToLeadWebhook(record) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 10000);
   try {
+    const headers = { "Content-Type": "application/json" };
+    if (config.leadWebhookSecret) headers["X-Tellen-Secret"] = config.leadWebhookSecret;
     const res = await fetch(config.leadWebhookUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify(record),
       signal: controller.signal,
     });

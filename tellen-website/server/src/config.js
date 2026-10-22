@@ -23,6 +23,7 @@ const config = {
   // --- lead / consultation destination (NOT yet provided — mock mode logs/stores locally) ---
   leadDestinationEmail: process.env.LEAD_DESTINATION_EMAIL || "",
   leadWebhookUrl: process.env.LEAD_WEBHOOK_URL || "",
+  leadWebhookSecret: process.env.LEAD_WEBHOOK_SECRET || "",
 
   // --- CORS ---
   // In production this MUST be the real site origin(s), comma separated.
