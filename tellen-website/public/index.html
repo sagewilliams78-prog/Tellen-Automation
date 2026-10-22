@@ -27,6 +27,9 @@
 <link rel="manifest" href="/assets/site.webmanifest" />
 
 <link rel="preload" as="image" href="/assets/hero-skyline.jpg" fetchpriority="high" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/styles.css" />
 
 <script type="application/ld+json">
@@ -66,8 +69,12 @@
 <main>
 
 <section class="hero" id="home" aria-label="Tellen Automation AI services">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-scan" aria-hidden="true"></div>
+  <div class="hero-orb orb-a" aria-hidden="true"></div>
+  <div class="hero-orb orb-b" aria-hidden="true"></div>
   <div class="wrap hero-content">
-    <div class="eyebrow">AI automation for modern businesses</div>
+    <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span>AI automation for modern businesses</div>
     <h1>WORK SMARTER.<br /><span>NOT HARDER.</span></h1>
     <p>Tellen Automation builds AI-powered systems to help handle calls, messages, appointments, and repetitive work—so you can focus on what matters.</p>
     <div class="actions">
@@ -88,7 +95,7 @@
 </div>
 
 <section class="section services" id="services">
-  <div class="wrap services-layout">
+  <div class="wrap services-layout reveal">
     <div>
       <div class="eyebrow">Our services</div>
       <h2>Powerful AI Solutions Built for Your Business</h2>
@@ -96,41 +103,41 @@
       <a class="btn secondary" href="#contact">Explore Your Options →</a>
     </div>
     <div class="service-grid">
-      <article class="service-card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5h2.8l1.1 3.9-1.8 1.6a12.3 12.3 0 0 0 5.9 5.9l1.6-1.8 3.9 1.1v2.8c0 .7-.6 1.2-1.3 1.1C10.4 18.4 5.6 13.6 4 7.3a1.2 1.2 0 0 1 1.1-1.3Z"/></svg></div><h3>AI Receptionist</h3><p>Handle common questions, collect caller details, and route requests.</p></article>
-      <article class="service-card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v3M16 3v3"/><path d="m8.5 14 2 2 4-4.5"/></svg></div><h3>Appointment Scheduling</h3><p>Connect booking flows to the tools your team already uses.</p></article>
-      <article class="service-card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.2a7.5 7.5 0 1 1 3.1 6.1L4 19l.9-3.4a7.4 7.4 0 0 1-.4-3.4Z"/><path d="M9 12.5 11.5 10l2 2L17 8.5"/><path d="M14.3 8.5h2.7v2.7"/></svg></div><h3>Lead Follow-Up</h3><p>Capture inquiries and help your team follow up consistently.</p></article>
-      <article class="service-card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.3a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6Z"/><path d="M19.3 13.6c-.2.6 0 1.3.5 1.7l.1.1a1.8 1.8 0 1 1-2.6 2.6l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5v.2a1.8 1.8 0 1 1-3.6 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a1.8 1.8 0 1 1-2.6-2.6l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1h-.2a1.8 1.8 0 0 1 0-3.6h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a1.8 1.8 0 1 1 2.6-2.6l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.5V3a1.8 1.8 0 1 1 3.6 0v.1a1.6 1.6 0 0 0 1 1.5c.6.2 1.3 0 1.7-.3l.1-.1a1.8 1.8 0 1 1 2.6 2.6l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1c.2.6.8 1 1.5 1h.2a1.8 1.8 0 0 1 0 3.6h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg></div><h3>Business Automation</h3><p>Connect repetitive tasks across your everyday tools.</p></article>
-      <article class="service-card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.3a7.5 7.5 0 1 1 3.2 6.1L4 19.2l.9-3.6a7.3 7.3 0 0 1-.4-3.3Z"/><path d="M9 13v-2.3M12.2 14v-4.3M15.4 13v-2.3"/></svg></div><h3>Voice &amp; Chat AI</h3><p>Customer-facing conversations with appropriate handoff paths.</p></article>
-      <article class="service-card"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 12 12 21l7.5-9L12 3Z"/><path d="M12 3v18M4.5 12h15"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div><h3>Custom AI Agents</h3><p>Tailored workflows for your processes, systems, and goals.</p></article>
+      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5h2.8l1.1 3.9-1.8 1.6a12.3 12.3 0 0 0 5.9 5.9l1.6-1.8 3.9 1.1v2.8c0 .7-.6 1.2-1.3 1.1C10.4 18.4 5.6 13.6 4 7.3a1.2 1.2 0 0 1 1.1-1.3Z"/></svg></div><h3>AI Receptionist</h3><p>Handle common questions, collect caller details, and route requests.</p></article>
+      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v3M16 3v3"/><path d="m8.5 14 2 2 4-4.5"/></svg></div><h3>Appointment Scheduling</h3><p>Connect booking flows to the tools your team already uses.</p></article>
+      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.2a7.5 7.5 0 1 1 3.1 6.1L4 19l.9-3.4a7.4 7.4 0 0 1-.4-3.4Z"/><path d="M9 12.5 11.5 10l2 2L17 8.5"/><path d="M14.3 8.5h2.7v2.7"/></svg></div><h3>Lead Follow-Up</h3><p>Capture inquiries and help your team follow up consistently.</p></article>
+      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.3a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6Z"/><path d="M19.3 13.6c-.2.6 0 1.3.5 1.7l.1.1a1.8 1.8 0 1 1-2.6 2.6l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5v.2a1.8 1.8 0 1 1-3.6 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a1.8 1.8 0 1 1-2.6-2.6l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1h-.2a1.8 1.8 0 0 1 0-3.6h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a1.8 1.8 0 1 1 2.6-2.6l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.5V3a1.8 1.8 0 1 1 3.6 0v.1a1.6 1.6 0 0 0 1 1.5c.6.2 1.3 0 1.7-.3l.1-.1a1.8 1.8 0 1 1 2.6 2.6l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1c.2.6.8 1 1.5 1h.2a1.8 1.8 0 0 1 0 3.6h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg></div><h3>Business Automation</h3><p>Connect repetitive tasks across your everyday tools.</p></article>
+      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.3a7.5 7.5 0 1 1 3.2 6.1L4 19.2l.9-3.6a7.3 7.3 0 0 1-.4-3.3Z"/><path d="M9 13v-2.3M12.2 14v-4.3M15.4 13v-2.3"/></svg></div><h3>Voice &amp; Chat AI</h3><p>Customer-facing conversations with appropriate handoff paths.</p></article>
+      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 12 12 21l7.5-9L12 3Z"/><path d="M12 3v18M4.5 12h15"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div><h3>Custom AI Agents</h3><p>Tailored workflows for your processes, systems, and goals.</p></article>
     </div>
   </div>
 </section>
 
 <section class="section steps" id="how">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">How it works</div>
       <h2>From Setup to Results</h2>
       <p>A clear process, with your team involved at every stage.</p>
     </div>
     <div class="step-grid">
-      <div class="step"><div class="number">1</div><h3>Consultation</h3><p>We learn about your business, goals, and pain points.</p></div>
-      <div class="step"><div class="number">2</div><h3>Build &amp; Integrate</h3><p>We design a workflow around your approved tools and requirements.</p></div>
-      <div class="step"><div class="number">3</div><h3>Test &amp; Optimize</h3><p>We test common scenarios and refine before broader use.</p></div>
-      <div class="step"><div class="number">4</div><h3>Support &amp; Improve</h3><p>We review performance and make adjustments as needed.</p></div>
+      <div class="step reveal-item"><div class="number">1</div><h3>Consultation</h3><p>We learn about your business, goals, and pain points.</p></div>
+      <div class="step reveal-item"><div class="number">2</div><h3>Build &amp; Integrate</h3><p>We design a workflow around your approved tools and requirements.</p></div>
+      <div class="step reveal-item"><div class="number">3</div><h3>Test &amp; Optimize</h3><p>We test common scenarios and refine before broader use.</p></div>
+      <div class="step reveal-item"><div class="number">4</div><h3>Support &amp; Improve</h3><p>We review performance and make adjustments as needed.</p></div>
     </div>
   </div>
 </section>
 
 <section class="section pricing" id="pricing">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Straightforward packages</div>
       <h2>Powerful Automation. Clear Pricing.</h2>
       <p>Choose a starting package, then tailor it to your business. All figures below are proposed launch rates in USD, subject to a written agreement.</p>
     </div>
     <div class="price-grid">
-      <article class="price">
+      <article class="price reveal-item">
         <div class="plan-label">START SMART</div>
         <h3>Starter</h3>
         <p class="desc">A focused AI workflow for small businesses.</p>
@@ -145,7 +152,7 @@
         </ul>
         <a class="btn secondary" href="#contact" data-plan="Starter">Choose Starter →</a>
       </article>
-      <article class="price popular">
+      <article class="price popular reveal-item">
         <div class="ribbon">BEST FOR GROWING TEAMS</div>
         <div class="plan-label">SCALE OPERATIONS</div>
         <h3>Growth</h3>
@@ -162,7 +169,7 @@
         </ul>
         <a class="btn" href="#contact" data-plan="Growth">Choose Growth →</a>
       </article>
-      <article class="price">
+      <article class="price reveal-item">
         <div class="plan-label">BUILT AROUND YOU</div>
         <h3>Enterprise</h3>
         <p class="desc">Complex operations and custom integrations.</p>
@@ -183,7 +190,7 @@
 </section>
 
 <section class="section about" id="about">
-  <div class="wrap about-grid">
+  <div class="wrap about-grid reveal">
     <div>
       <div class="eyebrow">About Tellen</div>
       <h2>Built by a Veteran.<br />Driven by Innovation.</h2>
@@ -215,22 +222,22 @@
 
 <section class="section industry" id="industries">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">Built for real operations</div>
       <h2>One Platform. Different Industries.</h2>
       <p>Choose the customer journey that fits your business. Each implementation is configured, tested, and reviewed with your team.</p>
     </div>
     <div class="industry-grid">
-      <article><span>01 / HOME SERVICES</span><h3>HVAC &amp; Plumbing</h3><p>Capture after-hours inquiries, qualify service requests, and route urgent issues to a human.</p></article>
-      <article><span>02 / PROPERTY</span><h3>Property Management</h3><p>Organize tenant requests, coordinate maintenance updates, and keep a clear escalation path.</p></article>
-      <article><span>03 / PROFESSIONAL</span><h3>Service Businesses</h3><p>Answer common questions, book consultations, and follow up on prospective customers.</p></article>
-      <article><span>04 / LOCAL BUSINESS</span><h3>Multi-location Teams</h3><p>Standardize intake and scheduling while preserving location-specific rules.</p></article>
+      <article class="reveal-item"><span>01 / HOME SERVICES</span><h3>HVAC &amp; Plumbing</h3><p>Capture after-hours inquiries, qualify service requests, and route urgent issues to a human.</p></article>
+      <article class="reveal-item"><span>02 / PROPERTY</span><h3>Property Management</h3><p>Organize tenant requests, coordinate maintenance updates, and keep a clear escalation path.</p></article>
+      <article class="reveal-item"><span>03 / PROFESSIONAL</span><h3>Service Businesses</h3><p>Answer common questions, book consultations, and follow up on prospective customers.</p></article>
+      <article class="reveal-item"><span>04 / LOCAL BUSINESS</span><h3>Multi-location Teams</h3><p>Standardize intake and scheduling while preserving location-specific rules.</p></article>
     </div>
   </div>
 </section>
 
 <section class="section estimate" id="estimate">
-  <div class="wrap estimate-layout">
+  <div class="wrap estimate-layout reveal">
     <div>
       <div class="eyebrow">Explore your investment</div>
       <h2>Build Your Starting Estimate</h2>
@@ -257,7 +264,7 @@
 </section>
 
 <section class="contact" id="contact">
-  <div class="wrap contact-grid">
+  <div class="wrap contact-grid reveal">
     <div>
       <div class="eyebrow">Let's build something great</div>
       <h2>Ready to Automate Your Business?</h2>
