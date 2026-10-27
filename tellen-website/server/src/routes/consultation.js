@@ -104,3 +104,4 @@ router.post("/consultation", consultationLimiter, async (req, res) => {
 });
 
 module.exports = router;
+module.exports.forwardToLeadWebhook = forwardToLeadWebhook;

@@ -47,4 +47,33 @@ const config = {
 config.chatMockMode = config.mockModeForced || !config.n8nChatWebhookUrl;
 config.leadMockMode = config.mockModeForced || (!config.leadDestinationEmail && !config.leadWebhookUrl);
 
+// --- Fail-closed guard against the exact misconfiguration this secret was
+// added to prevent: in production, never forward a lead over a webhook
+// that is unauthenticated (no LEAD_WEBHOOK_SECRET) or not HTTPS (secret
+// would travel in cleartext). Rather than silently sending it anyway (the
+// old behavior) or crashing the whole site over one misconfigured env var,
+// disable forwarding for this one endpoint and log loudly so the gap gets
+// noticed and fixed — leads are still captured via the local JSONL fallback
+// either way, so nothing is lost while it's disabled. ---
+if (config.nodeEnv === "production" && config.leadWebhookUrl && !config.mockModeForced) {
+  let reason = null;
+  if (!config.leadWebhookSecret) {
+    reason = "LEAD_WEBHOOK_URL is set without LEAD_WEBHOOK_SECRET";
+  } else if (!config.leadWebhookUrl.startsWith("https://")) {
+    reason = "LEAD_WEBHOOK_URL is not HTTPS, so the shared secret would travel in cleartext";
+  }
+  if (reason) {
+    console.error(
+      JSON.stringify({
+        ts: new Date().toISOString(),
+        level: "error",
+        event: "lead_webhook_insecure_config",
+        message: `${reason}. Lead forwarding disabled (leads still stored locally) until this is fixed.`,
+      })
+    );
+    config.leadWebhookUrl = "";
+    config.leadMockMode = config.mockModeForced || (!config.leadDestinationEmail && !config.leadWebhookUrl);
+  }
+}
+
 module.exports = config;
