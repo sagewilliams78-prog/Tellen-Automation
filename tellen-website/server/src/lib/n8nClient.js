@@ -7,11 +7,21 @@ const { log, hash } = require("./logger");
  * Chat Trigger node, not a generic custom webhook, so the request/response
  * shape below matches ITS protocol (confirmed against the live workflow):
  *
- *   Request body:  { action: "sendMessage", chatInput, sessionId, metadata: { client_id } }
+ *   Request body:  { action: "sendMessage", chatInput, sessionId, metadata: { client_id, api_key } }
  *   Response:      either a single JSON object ({ output: "..." }, non-streaming),
  *                  or a chunked newline-delimited stream of
  *                  { type: "begin" | "item" | "end", content?: "..." } objects
  *                  (the node's configured "streaming" response mode).
+ *
+ * api_key travels inside metadata, in the BODY, not as an Authorization
+ * header: the Chat Trigger node has no way to read raw HTTP headers, so a
+ * header here would be silently ignored server-side (confirmed against the
+ * node's own parameter schema — it only supports basicAuth/n8nUserAuth/none,
+ * none of which this client was using anyway). This is the whole point of
+ * the field: the shared chat webhook URL is public to every client's own
+ * deployed server, so n8n checks this value in a "Verify Chat Secret" node
+ * right after the trigger and routes anything that doesn't match to a
+ * rejection reply, instead of running the agent for an unverified caller.
  *
  * This client handles both response shapes defensively, because the exact
  * wire format of the streaming mode could not be verified from this
@@ -30,17 +40,14 @@ async function callN8nChat(message, sessionId) {
   const timer = setTimeout(() => controller.abort(), config.n8nTimeoutMs);
 
   try {
-    const headers = { "Content-Type": "application/json" };
-    if (config.n8nChatApiKey) headers["Authorization"] = `Bearer ${config.n8nChatApiKey}`;
-
     const res = await fetch(config.n8nChatWebhookUrl, {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action: "sendMessage",
         chatInput: message,
         sessionId,
-        metadata: { client_id: config.n8nClientId },
+        metadata: { client_id: config.n8nClientId, api_key: config.n8nChatApiKey },
       }),
       signal: controller.signal,
     });

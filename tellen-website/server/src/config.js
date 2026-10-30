@@ -15,6 +15,13 @@ const config = {
   // which row of that workflow's "clients" data table answers — it must match
   // a client_id with status "active" there. Leave the webhook URL blank to
   // fall back to mock mode (canned demo replies, no external calls).
+  //
+  // N8N_CHAT_API_KEY must match the literal secret configured in n8n's
+  // "Verify Chat Secret" node on that same workflow once it's published —
+  // that webhook URL is shared across every client's own deployed server,
+  // and this is the only thing that stops a stranger from hitting it
+  // directly. It's sent in the request body (metadata.api_key), not as a
+  // header: the Chat Trigger node can't read raw HTTP headers at all.
   n8nChatWebhookUrl: process.env.N8N_CHAT_WEBHOOK_URL || "",
   n8nChatApiKey: process.env.N8N_CHAT_API_KEY || "",
   n8nClientId: process.env.N8N_CLIENT_ID || "tellen-automation",
