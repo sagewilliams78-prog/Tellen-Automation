@@ -296,6 +296,21 @@ export function create(canvas, { reducedQuality = false } = {}) {
     camTarget: new THREE.Vector3(0, 0, 0),
   };
 
+  // Scratch vectors reused every animation frame instead of allocating new
+  // THREE.Vector3 instances each tick. The render loop and the hotspot/line
+  // updates below run at 60fps indefinitely, so per-frame allocation here
+  // adds up to steady GC churn that shows up as periodic micro-stutter
+  // (especially on lower-end mobile hardware). Mutating these in place
+  // keeps the loop allocation-free.
+  const _lookTarget = new THREE.Vector3();
+  const _currentLook = new THREE.Vector3();
+  const _lineA = new THREE.Vector3();
+  const _lineB = new THREE.Vector3();
+  const _lineOffset = new THREE.Vector3();
+  const _hotspotWorld = new THREE.Vector3();
+  const _hotspotProj = new THREE.Vector3();
+  const hotspotResults = [];
+
   function setSeparation(v) {
     state.separation = v;
   }
@@ -308,23 +323,32 @@ export function create(canvas, { reducedQuality = false } = {}) {
   }
 
   function getHotspotScreenPositions() {
-    const result = [];
-    for (const seg of segments) {
-      const dist = 0.55 + state.separation * 1.25;
-      const worldPos = new THREE.Vector3(
+    // Reuses a fixed-length array of fixed objects and two scratch vectors
+    // instead of allocating a new array + Vector3s + plain objects every
+    // call (this runs every rAF frame from the hotspot sync loop). Safe
+    // because callers read .x/.y/.visible synchronously within the same
+    // frame rather than holding onto references across frames.
+    const dist = 0.55 + state.separation * 1.25;
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
+      _hotspotWorld.set(
         Math.cos(seg.midAngle) * (RING_RADIUS + dist * 0.4),
         0,
         Math.sin(seg.midAngle) * (RING_RADIUS + dist * 0.4)
       );
-      worldPos.applyMatrix4(segmentGroup.matrixWorld);
-      const proj = worldPos.clone().project(camera);
-      result.push({
-        x: (proj.x * 0.5 + 0.5) * canvas.clientWidth,
-        y: (1 - (proj.y * 0.5 + 0.5)) * canvas.clientHeight,
-        visible: proj.z < 1,
-      });
+      _hotspotWorld.applyMatrix4(segmentGroup.matrixWorld);
+      _hotspotProj.copy(_hotspotWorld).project(camera);
+      let entry = hotspotResults[i];
+      if (!entry) {
+        entry = { x: 0, y: 0, visible: false };
+        hotspotResults[i] = entry;
+      }
+      entry.x = (_hotspotProj.x * 0.5 + 0.5) * canvas.clientWidth;
+      entry.y = (1 - (_hotspotProj.y * 0.5 + 0.5)) * canvas.clientHeight;
+      entry.visible = _hotspotProj.z < 1;
     }
-    return result;
+    hotspotResults.length = segments.length;
+    return hotspotResults;
   }
 
   function resize() {
@@ -366,8 +390,10 @@ export function create(canvas, { reducedQuality = false } = {}) {
     const breathe = 0.65 + 0.35 * Math.sin(idleT * 3);
     segments.forEach((seg, i) => {
       const next = segments[(i + 1) % segments.length];
-      const a = seg.pivot.position.clone().add(new THREE.Vector3(seg.normal.x * RING_RADIUS, 0, seg.normal.z * RING_RADIUS));
-      const b = next.pivot.position.clone().add(new THREE.Vector3(next.normal.x * RING_RADIUS, 0, next.normal.z * RING_RADIUS));
+      _lineOffset.set(seg.normal.x * RING_RADIUS, 0, seg.normal.z * RING_RADIUS);
+      const a = _lineA.copy(seg.pivot.position).add(_lineOffset);
+      _lineOffset.set(next.normal.x * RING_RADIUS, 0, next.normal.z * RING_RADIUS);
+      const b = _lineB.copy(next.pivot.position).add(_lineOffset);
       const positions = connectLines[i].geometry.attributes.position;
       positions.setXYZ(0, a.x, a.y, a.z);
       positions.setXYZ(1, b.x, b.y, b.z);
@@ -376,10 +402,10 @@ export function create(canvas, { reducedQuality = false } = {}) {
     });
 
     camera.position.lerp(state.camPos, CAMERA_EASE);
-    const lookTarget = new THREE.Vector3().copy(state.camTarget);
-    const currentLook = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position);
-    currentLook.lerp(lookTarget, CAMERA_EASE);
-    camera.lookAt(currentLook);
+    _lookTarget.copy(state.camTarget);
+    _currentLook.set(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position);
+    _currentLook.lerp(_lookTarget, CAMERA_EASE);
+    camera.lookAt(_currentLook);
 
     renderer.render(scene, camera);
   }
