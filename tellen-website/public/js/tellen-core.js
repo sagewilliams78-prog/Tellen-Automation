@@ -25,6 +25,18 @@ const SEGMENT_COUNT = 3;
 const RING_RADIUS = 1.7;
 const GAP_DEGREES = 10; // gap between segments when fully assembled
 
+// How quickly the camera chases its scroll-driven target each frame (0-1,
+// higher = snappier). GSAP's ScrollTrigger scrub is unscrubbed (`scrub: true`
+// in opening-experience.js), so camPos/camTarget already update in lockstep
+// with the scrollbar with zero added delay — this lerp was the only place
+// introducing lag between "you scrolled" and "the camera actually moved".
+// 0.08 meant ~36 frames (~0.6s) to settle 95% of the way to a new target,
+// which reads as the scene visibly catching up after you stop scrolling
+// rather than tracking the scroll. 0.32 settles in ~7 frames (~115ms) —
+// still eased enough to avoid raw per-frame scroll jitter, but close
+// enough to 1:1 that the ring and camera feel driven by the scroll itself.
+const CAMERA_EASE = 0.32;
+
 function isMobile() {
   return window.matchMedia("(max-width: 760px)").matches;
 }
@@ -363,10 +375,10 @@ export function create(canvas, { reducedQuality = false } = {}) {
       connectLines[i].material.opacity = state.connect * 0.5 * breathe;
     });
 
-    camera.position.lerp(state.camPos, 0.08);
+    camera.position.lerp(state.camPos, CAMERA_EASE);
     const lookTarget = new THREE.Vector3().copy(state.camTarget);
     const currentLook = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion).add(camera.position);
-    currentLook.lerp(lookTarget, 0.08);
+    currentLook.lerp(lookTarget, CAMERA_EASE);
     camera.lookAt(currentLook);
 
     renderer.render(scene, camera);
