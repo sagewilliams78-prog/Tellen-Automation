@@ -15,6 +15,13 @@ const config = {
   // which row of that workflow's "clients" data table answers — it must match
   // a client_id with status "active" there. Leave the webhook URL blank to
   // fall back to mock mode (canned demo replies, no external calls).
+  //
+  // N8N_CHAT_API_KEY must match the literal secret configured in n8n's
+  // "Verify Chat Secret" node on that same workflow once it's published —
+  // that webhook URL is shared across every client's own deployed server,
+  // and this is the only thing that stops a stranger from hitting it
+  // directly. It's sent in the request body (metadata.api_key), not as a
+  // header: the Chat Trigger node can't read raw HTTP headers at all.
   n8nChatWebhookUrl: process.env.N8N_CHAT_WEBHOOK_URL || "",
   n8nChatApiKey: process.env.N8N_CHAT_API_KEY || "",
   n8nClientId: process.env.N8N_CLIENT_ID || "tellen-automation",
@@ -46,5 +53,34 @@ const config = {
 
 config.chatMockMode = config.mockModeForced || !config.n8nChatWebhookUrl;
 config.leadMockMode = config.mockModeForced || (!config.leadDestinationEmail && !config.leadWebhookUrl);
+
+// --- Fail-closed guard against the exact misconfiguration this secret was
+// added to prevent: in production, never forward a lead over a webhook
+// that is unauthenticated (no LEAD_WEBHOOK_SECRET) or not HTTPS (secret
+// would travel in cleartext). Rather than silently sending it anyway (the
+// old behavior) or crashing the whole site over one misconfigured env var,
+// disable forwarding for this one endpoint and log loudly so the gap gets
+// noticed and fixed — leads are still captured via the local JSONL fallback
+// either way, so nothing is lost while it's disabled. ---
+if (config.nodeEnv === "production" && config.leadWebhookUrl && !config.mockModeForced) {
+  let reason = null;
+  if (!config.leadWebhookSecret) {
+    reason = "LEAD_WEBHOOK_URL is set without LEAD_WEBHOOK_SECRET";
+  } else if (!config.leadWebhookUrl.startsWith("https://")) {
+    reason = "LEAD_WEBHOOK_URL is not HTTPS, so the shared secret would travel in cleartext";
+  }
+  if (reason) {
+    console.error(
+      JSON.stringify({
+        ts: new Date().toISOString(),
+        level: "error",
+        event: "lead_webhook_insecure_config",
+        message: `${reason}. Lead forwarding disabled (leads still stored locally) until this is fixed.`,
+      })
+    );
+    config.leadWebhookUrl = "";
+    config.leadMockMode = config.mockModeForced || (!config.leadDestinationEmail && !config.leadWebhookUrl);
+  }
+}
 
 module.exports = config;
