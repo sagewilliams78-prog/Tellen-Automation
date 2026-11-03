@@ -19,7 +19,27 @@ app.use(
       directives: {
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
-        styleSrc: ["'self'"],
+        // Pre-existing bug fixed in the redesign pass: the page has always
+        // linked Google Fonts (index.html <link>), but style-src only ever
+        // allowed 'self', so the stylesheet — and the font files it
+        // references — were silently blocked by CSP in production.
+        //
+        // 'unsafe-inline' here is a deliberate, scoped addition for this
+        // redesign: the scroll-driven hotspots are repositioned every
+        // animation frame via direct style property assignment
+        // (el.style.left/top), and GSAP's own tweens work the same way —
+        // both go through the element's inline `style`, which Chrome's
+        // CSP enforcement treats as "inline style" regardless of whether
+        // it was set via a string or the CSSOM setter. There is no way to
+        // keep a continuously-repositioned real HTML element (required
+        // for keyboard/SR accessibility — the brief explicitly rules out
+        // drawing the hotspots inside the canvas) under a no-inline-style
+        // policy without per-request nonces, which this static file
+        // server doesn't support. script-src is untouched and stays
+        // locked to 'self' with no 'unsafe-inline'/'unsafe-eval' — the
+        // vector that actually matters for XSS.
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:"],
         connectSrc: ["'self'"],
         objectSrc: ["'none'"],

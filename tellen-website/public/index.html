@@ -31,6 +31,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="/css/styles.css" />
+<link rel="stylesheet" href="/css/cinematic.css" />
 
 <script type="application/ld+json">
 {
@@ -47,106 +48,107 @@
 </head>
 <body>
 
-<header class="nav">
-  <div class="wrap nav-inner">
-    <a class="brand" href="#home" aria-label="Tellen Automation home">
-      <img src="/assets/logo-mark-v2.png" alt="Tellen symbol" width="48" height="37" decoding="async" />
-      <span class="brand-text">TELLEN<small>AUTOMATION</small></span>
-    </a>
-    <button class="mobile-menu" id="menu" type="button" aria-controls="navlinks" aria-expanded="false" aria-label="Toggle navigation">☰</button>
-    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
-      <a href="#home">Home</a>
-      <a href="#services">Services</a>
-      <a href="#industries">Industries</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-      <a class="nav-phone" href="tel:+12137727402"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5h2.8l1.1 3.9-1.8 1.6a12.3 12.3 0 0 0 5.9 5.9l1.6-1.8 3.9 1.1v2.8c0 .7-.6 1.2-1.3 1.1C10.4 18.4 5.6 13.6 4 7.3a1.2 1.2 0 0 1 1.1-1.3Z"/></svg></span>+1 (213) 772-7402</a>
-      <a class="btn" href="#contact">Get Started →</a>
+<a href="#main-content" class="tc-skip">Skip to main content</a>
+
+<div class="tc-root">
+<header class="tc-nav">
+  <div class="tc-nav-inner">
+    <span class="tc-wordmark">TELLEN<small>AUTOMATION</small></span>
+    <nav class="tc-nav-links" aria-label="Primary">
+      <button type="button" data-tc-nav="systems">Systems</button>
+      <button type="button" data-tc-nav="experience" aria-label="Experience"><span class="tc-nav-hide-sm">Experience</span></button>
+      <button type="button" class="tc-btn tc-btn-primary" id="tcBookDemo">Book a demo</button>
     </nav>
   </div>
 </header>
 
-<main>
-
-<section class="hero" id="home" aria-label="Tellen Automation AI services">
-  <div class="hero-grid" aria-hidden="true"></div>
-  <div class="hero-scan" aria-hidden="true"></div>
-  <div class="hero-orb orb-a" aria-hidden="true"></div>
-  <div class="hero-orb orb-b" aria-hidden="true"></div>
-  <div class="wrap hero-content">
-    <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span>AI automation for modern businesses</div>
-    <h1>WORK SMARTER.<br /><span>NOT HARDER.</span></h1>
-    <p>Tellen Automation builds AI-powered systems to help handle calls, messages, appointments, and repetitive work—so you can focus on what matters.</p>
-    <div class="actions">
-      <a class="btn" href="#contact">Get a Free Consultation →</a>
-      <a class="btn secondary" href="#how">See How It Works ↘</a>
+<section class="tc-stage-wrap" id="tcStageWrap" aria-label="Tellen — connected AI services overview">
+  <div class="tc-pin">
+    <div class="tc-canvas-host" id="tcCanvasHost" aria-hidden="true">
+      <canvas id="tcCanvas"></canvas>
     </div>
-    <a class="hero-call" href="tel:+12137727402">
-      <span class="status-dot" aria-hidden="true"></span>
-      Or call our live AI receptionist right now — <strong>+1 (213) 772-7402</strong>
-    </a>
-  </div>
-  <div class="hero-signature">TELLEN<small>AUTOMATION</small></div>
-</section>
+    <div class="tc-room-floor" aria-hidden="true"></div>
 
-<div class="featurebar">
-  <div class="wrap feature-grid">
-    <div class="feature"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5h2.8l1.1 3.9-1.8 1.6a12.3 12.3 0 0 0 5.9 5.9l1.6-1.8 3.9 1.1v2.8c0 .7-.6 1.2-1.3 1.1C10.4 18.4 5.6 13.6 4 7.3a1.2 1.2 0 0 1 1.1-1.3Z"/></svg></span><div><strong>AI Receptionist</strong><small>Help respond around the clock</small></div></div>
-    <div class="feature"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v3M16 3v3"/><path d="m8.5 14 2 2 4-4.5"/></svg></span><div><strong>Smart Scheduling</strong><small>Streamline appointment booking</small></div></div>
-    <div class="feature"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.2a7.5 7.5 0 1 1 3.1 6.1L4 19l.9-3.4a7.4 7.4 0 0 1-.4-3.4Z"/><path d="M9 12.5 11.5 10l2 2L17 8.5"/><path d="M14.3 8.5h2.7v2.7"/></svg></span><div><strong>Lead Follow-Up</strong><small>Keep conversations moving</small></div></div>
-    <div class="feature"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.3a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6Z"/><path d="M19.3 13.6c-.2.6 0 1.3.5 1.7l.1.1a1.8 1.8 0 1 1-2.6 2.6l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5v.2a1.8 1.8 0 1 1-3.6 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a1.8 1.8 0 1 1-2.6-2.6l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1h-.2a1.8 1.8 0 0 1 0-3.6h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a1.8 1.8 0 1 1 2.6-2.6l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.5V3a1.8 1.8 0 1 1 3.6 0v.1a1.6 1.6 0 0 0 1 1.5c.6.2 1.3 0 1.7-.3l.1-.1a1.8 1.8 0 1 1 2.6 2.6l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1c.2.6.8 1 1.5 1h.2a1.8 1.8 0 0 1 0 3.6h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg></span><div><strong>Custom Automations</strong><small>Built around your business</small></div></div>
+    <div class="tc-content">
+      <div class="tc-content-inner">
+        <div class="tc-hero-copy">
+          <div class="tc-eyebrow-row"><span class="tc-dot" aria-hidden="true"></span><span class="tc-eyebrow">AI receptionists · scheduling · follow-up</span></div>
+          <h1>Your business.<br />Always on.</h1>
+          <p>AI receptionists, scheduling and follow-up. One connected experience.</p>
+          <div class="tc-hero-actions">
+            <button type="button" class="tc-btn tc-btn-primary" data-tc-nav="systems">Explore Tellen</button>
+            <button type="button" class="tc-btn tc-btn-ghost" id="tcTryReceptionist">Try the receptionist</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tc-stage-label tc-label-approach" id="tcLabelApproach">Approaching the core</div>
+    <div class="tc-stage-label tc-label-explore" id="tcLabelExplore">Select a service to explore it</div>
+    <div class="tc-stage-label tc-label-connect" id="tcLabelConnect">How an inquiry moves through Tellen</div>
+
+    <button type="button" class="tc-hotspot" id="tcHotspot0" data-service="receptionist" tabindex="-1" aria-haspopup="dialog"><span class="tc-hotspot-dot" aria-hidden="true"></span>Receptionist</button>
+    <button type="button" class="tc-hotspot" id="tcHotspot1" data-service="scheduling" tabindex="-1" aria-haspopup="dialog"><span class="tc-hotspot-dot" aria-hidden="true"></span>Scheduling</button>
+    <button type="button" class="tc-hotspot" id="tcHotspot2" data-service="followup" tabindex="-1" aria-haspopup="dialog"><span class="tc-hotspot-dot" aria-hidden="true"></span>Follow-up</button>
+
+    <div class="tc-hotspot-legend" id="tcHotspotLegend" aria-label="Explore Tellen's services">
+      <button type="button" data-service="receptionist" tabindex="-1">Receptionist →</button>
+      <button type="button" data-service="scheduling" tabindex="-1">Scheduling →</button>
+      <button type="button" data-service="followup" tabindex="-1">Follow-up →</button>
+    </div>
+
+    <button type="button" class="tc-btn tc-btn-ghost tc-back-overview" id="tcBackOverview">← Back to overview</button>
+
+    <div class="tc-progress-rail" id="tcProgressRail" aria-hidden="true">
+      <span class="tick" data-stage="reveal"></span>
+      <span class="tick" data-stage="approach"></span>
+      <span class="tick" data-stage="explore"></span>
+      <span class="tick" data-stage="connect"></span>
+      <span class="tick" data-stage="next"></span>
+    </div>
+
+    <div class="tc-final-actions" id="tcFinalActions">
+      <button type="button" class="tc-btn tc-btn-primary" id="tcFinalTry">Try the receptionist</button>
+      <button type="button" class="tc-btn tc-btn-ghost" id="tcFinalBook">Book a demo</button>
+    </div>
   </div>
+
+  <p class="tc-static-note">Receptionist, scheduling and follow-up — one connected system. Select any of the three below.</p>
+  <div class="tc-static-services">
+    <button type="button" class="tc-service-tile" data-service="receptionist">
+      <span class="tc-eyebrow">01</span>
+      <h3>Receptionist</h3>
+      <p>Answers calls and chats, 24/7, and hands off cleanly when a human is needed.</p>
+    </button>
+    <button type="button" class="tc-service-tile" data-service="scheduling">
+      <span class="tc-eyebrow">02</span>
+      <h3>Scheduling</h3>
+      <p>Books real appointments straight onto the calendar your team already uses.</p>
+    </button>
+    <button type="button" class="tc-service-tile" data-service="followup">
+      <span class="tc-eyebrow">03</span>
+      <h3>Follow-up</h3>
+      <p>Keeps new inquiries from going cold with timely, consistent outreach.</p>
+    </button>
+  </div>
+</section>
 </div>
 
-<section class="section trylive" id="trylive">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <div class="eyebrow"><span class="status-dot" aria-hidden="true"></span>Not a mockup — it's live</div>
-      <h2>Experience Tellen AI Right Now</h2>
-      <p>Same AI, same backend, real bookings. Three ways to see it work before you talk to us.</p>
+<dialog class="tc-dialog" id="tcServiceDialog" aria-labelledby="tcDialogTitle">
+  <div class="tc-dialog-inner">
+    <div class="tc-dialog-head">
+      <div>
+        <p class="tc-dialog-kicker" id="tcDialogKicker"></p>
+        <h2 id="tcDialogTitle"></h2>
+      </div>
+      <button type="button" class="tc-dialog-close" id="tcDialogClose" aria-label="Close">✕</button>
     </div>
-    <div class="trylive-grid">
-      <article class="trylive-card reveal-item">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5h2.8l1.1 3.9-1.8 1.6a12.3 12.3 0 0 0 5.9 5.9l1.6-1.8 3.9 1.1v2.8c0 .7-.6 1.2-1.3 1.1C10.4 18.4 5.6 13.6 4 7.3a1.2 1.2 0 0 1 1.1-1.3Z"/></svg></div>
-        <h3>Call It</h3>
-        <p>Talk to our live AI receptionist on a real phone line, right now.</p>
-        <a class="trylive-cta" href="tel:+12137727402">+1 (213) 772-7402</a>
-      </article>
-      <article class="trylive-card reveal-item">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.3a7.5 7.5 0 1 1 3.2 6.1L4 19.2l.9-3.6a7.3 7.3 0 0 1-.4-3.3Z"/><path d="M9 13v-2.3M12.2 14v-4.3M15.4 13v-2.3"/></svg></div>
-        <h3>Chat With It</h3>
-        <p>Ask about pricing, services, or how a deployment would work for you.</p>
-        <button class="trylive-cta" type="button" id="trylive-chat-btn">Open Chat →</button>
-      </article>
-      <article class="trylive-card reveal-item">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v3M16 3v3"/><path d="m8.5 14 2 2 4-4.5"/></svg></div>
-        <h3>Book With It</h3>
-        <p>Get a free 30-minute consultation straight onto the calendar.</p>
-        <a class="trylive-cta" href="#contact">Get Started →</a>
-      </article>
-    </div>
+    <div class="tc-dialog-body" id="tcDialogBody"></div>
   </div>
-</section>
+</dialog>
 
-<section class="section services" id="services">
-  <div class="wrap services-layout reveal">
-    <div>
-      <div class="eyebrow">Our services</div>
-      <h2>Powerful AI Solutions Built for Your Business</h2>
-      <p>Practical automation designed around your workflow. Spend less time on repetitive tasks and more time serving customers.</p>
-      <a class="btn secondary" href="#contact">Explore Your Options →</a>
-    </div>
-    <div class="service-grid">
-      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 4.5h2.8l1.1 3.9-1.8 1.6a12.3 12.3 0 0 0 5.9 5.9l1.6-1.8 3.9 1.1v2.8c0 .7-.6 1.2-1.3 1.1C10.4 18.4 5.6 13.6 4 7.3a1.2 1.2 0 0 1 1.1-1.3Z"/></svg></div><h3>AI Receptionist</h3><p>Handle common questions, collect caller details, and route requests.</p></article>
-      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17"/><path d="M8 3v3M16 3v3"/><path d="m8.5 14 2 2 4-4.5"/></svg></div><h3>Appointment Scheduling</h3><p>Connect booking flows to the tools your team already uses.</p></article>
-      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.2a7.5 7.5 0 1 1 3.1 6.1L4 19l.9-3.4a7.4 7.4 0 0 1-.4-3.4Z"/><path d="M9 12.5 11.5 10l2 2L17 8.5"/><path d="M14.3 8.5h2.7v2.7"/></svg></div><h3>Lead Follow-Up</h3><p>Capture inquiries and help your team follow up consistently.</p></article>
-      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.3a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6Z"/><path d="M19.3 13.6c-.2.6 0 1.3.5 1.7l.1.1a1.8 1.8 0 1 1-2.6 2.6l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5v.2a1.8 1.8 0 1 1-3.6 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a1.8 1.8 0 1 1-2.6-2.6l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1h-.2a1.8 1.8 0 0 1 0-3.6h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a1.8 1.8 0 1 1 2.6-2.6l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.5V3a1.8 1.8 0 1 1 3.6 0v.1a1.6 1.6 0 0 0 1 1.5c.6.2 1.3 0 1.7-.3l.1-.1a1.8 1.8 0 1 1 2.6 2.6l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1c.2.6.8 1 1.5 1h.2a1.8 1.8 0 0 1 0 3.6h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg></div><h3>Business Automation</h3><p>Connect repetitive tasks across your everyday tools.</p></article>
-      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12.3a7.5 7.5 0 1 1 3.2 6.1L4 19.2l.9-3.6a7.3 7.3 0 0 1-.4-3.3Z"/><path d="M9 13v-2.3M12.2 14v-4.3M15.4 13v-2.3"/></svg></div><h3>Voice &amp; Chat AI</h3><p>Customer-facing conversations with appropriate handoff paths.</p></article>
-      <article class="service-card reveal-item"><div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 12 12 21l7.5-9L12 3Z"/><path d="M12 3v18M4.5 12h15"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div><h3>Custom AI Agents</h3><p>Tailored workflows for your processes, systems, and goals.</p></article>
-    </div>
-  </div>
-</section>
+<main id="main-content" tabindex="-1">
+
 
 <section class="section steps" id="how">
   <div class="wrap">
@@ -397,5 +399,9 @@
 
 <script src="/js/main.js"></script>
 <script src="/js/chat-widget.js"></script>
+<!-- Opening experience: self-hosted (no third-party script hosts, no CSP changes) -->
+<script src="/js/vendor/gsap.min.js"></script>
+<script src="/js/vendor/ScrollTrigger.min.js"></script>
+<script src="/js/opening-experience.js"></script>
 </body>
 </html>

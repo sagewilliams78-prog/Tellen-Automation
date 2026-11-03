@@ -1,0 +1,535 @@
+/* =========================================================
+   Tellen Automation — cinematic opening experience
+   Scoped additively to the new hero/nav/core/service-dialog
+   markup only. Does not touch the legacy dark-theme sections
+   further down the page (trylive, pricing, about, etc.) —
+   those keep their existing styles.css rules untouched.
+   ========================================================= */
+
+:root {
+  --tc-white: #fbfbfc;
+  --tc-grey: #eef0f2;
+  --tc-grey-2: #e2e5e9;
+  --tc-charcoal: #1b1d22;
+  --tc-charcoal-soft: #4a4e57;
+  --tc-silver: #c9ced6;
+  --tc-silver-dark: #8a909b;
+  --tc-blue: #2f6bff;
+  --tc-blue-soft: #6f93ff;
+  --tc-blue-glow: rgba(47, 107, 255, 0.28);
+  --tc-radius: 16px;
+  --tc-nav-h: 84px;
+}
+
+.tc-root { color: var(--tc-charcoal); }
+
+.tc-root * { box-sizing: border-box; }
+
+/* ---------- Skip / utility ---------- */
+.tc-skip {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translate(-50%, -140%);
+  background: var(--tc-charcoal);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  z-index: 100;
+  transition: transform .2s;
+}
+.tc-skip:focus-visible { transform: translate(-50%, 0); outline: 2px solid var(--tc-blue); outline-offset: 2px; }
+
+.tc-visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Nav ---------- */
+.tc-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--tc-nav-h);
+  background: rgba(251, 251, 252, 0.82);
+  backdrop-filter: blur(14px) saturate(1.1);
+  border-bottom: 1px solid rgba(27, 29, 34, 0.08);
+}
+.tc-nav-inner {
+  width: min(1240px, calc(100% - 48px));
+  margin: auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.tc-wordmark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.22em;
+  color: var(--tc-charcoal);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.tc-wordmark small {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--tc-silver-dark);
+  font-weight: 600;
+}
+.tc-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: 14px;
+  color: var(--tc-charcoal-soft);
+}
+.tc-nav-links button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 6px 2px;
+  position: relative;
+}
+.tc-nav-links button:hover { color: var(--tc-charcoal); }
+.tc-nav-links button[aria-current="true"] { color: var(--tc-charcoal); }
+.tc-nav-links button[aria-current="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -8px;
+  height: 2px;
+  background: var(--tc-blue);
+  border-radius: 2px;
+}
+.tc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 11px 20px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+  min-height: 42px;
+  white-space: nowrap;
+}
+.tc-btn-primary {
+  background: linear-gradient(135deg, var(--tc-blue), #1d4fd6);
+  color: #fff;
+  box-shadow: 0 6px 20px var(--tc-blue-glow);
+}
+.tc-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 26px var(--tc-blue-glow); }
+.tc-btn-ghost {
+  background: rgba(255,255,255,0.5);
+  border: 1px solid rgba(27,29,34,0.14);
+  color: var(--tc-charcoal);
+}
+.tc-btn-ghost:hover { border-color: var(--tc-charcoal-soft); background: #fff; }
+.tc-root a:focus-visible,
+.tc-root button:focus-visible,
+.tc-root [tabindex]:focus-visible {
+  outline: 3px solid var(--tc-blue);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ---------- Opening / scroll stage ---------- */
+.tc-stage-wrap {
+  position: relative;
+  background: linear-gradient(180deg, var(--tc-white) 0%, var(--tc-grey) 55%, var(--tc-grey-2) 100%);
+}
+
+/* Default / no-JS / reduced-motion / no-WebGL baseline: normal document
+   flow, no pinning, no canvas. This is what renders before any script
+   runs, and permanently if WebGL or motion isn't available — it is the
+   real fallback, not an afterthought. */
+.tc-pin {
+  position: relative;
+  min-height: auto;
+  padding-bottom: 48px;
+}
+.tc-canvas-host { display: none; }
+
+/* JS-enhanced (WebGL present + motion OK): tall scroll track pins the
+   stage and reveals the 3D canvas. Added by opening-experience.js only
+   after both checks pass. */
+.tc-stage-wrap.tc-enhanced {
+  height: 500vh;
+}
+.tc-stage-wrap.tc-enhanced .tc-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.tc-stage-wrap.tc-enhanced .tc-canvas-host { display: block; }
+.tc-stage-wrap.tc-enhanced .tc-static-services,
+.tc-stage-wrap.tc-enhanced .tc-static-note { display: none; }
+
+.tc-canvas-host {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.tc-canvas-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+}
+
+/* Grounding gradient so the core reads as floating in a bright room */
+.tc-room-floor {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, rgba(27,29,34,0.05));
+  z-index: 0;
+  pointer-events: none;
+}
+
+.tc-content {
+  position: relative;
+  z-index: 2;
+  height: auto;
+  padding: 64px 0 20px;
+  display: flex;
+  align-items: center;
+}
+.tc-stage-wrap.tc-enhanced .tc-content {
+  height: 100%;
+  padding: 0;
+  pointer-events: none; /* re-enabled on specific interactive children below */
+}
+.tc-content-inner {
+  width: min(1240px, calc(100% - 48px));
+  margin: auto;
+  pointer-events: none;
+}
+.tc-hero-copy {
+  max-width: 560px;
+  pointer-events: auto;
+}
+.tc-eyebrow-row { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.tc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--tc-blue); box-shadow: 0 0 0 4px var(--tc-blue-glow); }
+.tc-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--tc-silver-dark);
+}
+.tc-hero-copy h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(42px, 6.4vw, 80px);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 0 0 22px;
+  color: var(--tc-charcoal);
+}
+.tc-hero-copy p {
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.55;
+  color: var(--tc-charcoal-soft);
+  max-width: 440px;
+  margin: 0 0 32px;
+}
+.tc-hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+
+/* Stage sub-states fade in as scroll progresses; default hidden until JS marks ready */
+.tc-stage-label {
+  position: absolute;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--tc-charcoal);
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(27,29,34,0.08);
+  border-radius: 999px;
+  padding: 8px 14px;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .35s, transform .35s;
+  pointer-events: none;
+}
+.tc-stage-label.tc-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.tc-label-approach { left: 50%; top: 16%; }
+.tc-label-explore { left: 50%; top: 12%; }
+.tc-label-connect { left: 50%; top: 12%; }
+.tc-stage-label[class*="tc-label-"] { transform: translate(-50%, 6px); }
+.tc-stage-label[class*="tc-label-"].tc-visible { transform: translate(-50%, 0); }
+
+/* ---------- Hotspots ---------- */
+.tc-hotspot {
+  position: absolute;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid rgba(27,29,34,0.1);
+  border-radius: 999px;
+  padding: 9px 16px 9px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tc-charcoal);
+  box-shadow: 0 10px 26px rgba(27,29,34,0.12);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s, transform .2s, box-shadow .2s;
+}
+.tc-hotspot .tc-hotspot-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--tc-blue);
+  box-shadow: 0 0 0 5px var(--tc-blue-glow);
+}
+.tc-hotspot.tc-active-stage { opacity: 1; pointer-events: auto; }
+.tc-hotspot:hover, .tc-hotspot:focus-visible { box-shadow: 0 14px 32px rgba(27,29,34,0.18); transform: translate(-50%, -52%); }
+
+/* Always-reachable keyboard list, visually a quiet legend near the core.
+   Mirrors the floating hotspots so Tab order works with no pointer and
+   regardless of scroll position. */
+.tc-hotspot-legend {
+  position: absolute;
+  z-index: 6;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.tc-hotspot-legend.tc-visible { pointer-events: auto; }
+.tc-hotspot-legend button {
+  pointer-events: auto;
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(27,29,34,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tc-charcoal);
+  cursor: pointer;
+  text-align: left;
+  min-width: 150px;
+}
+.tc-hotspot-legend button:hover { border-color: var(--tc-blue); }
+
+/* ---------- Back to overview ---------- */
+.tc-back-overview {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 36px;
+  transform: translateX(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s;
+}
+.tc-back-overview.tc-visible { opacity: 1; pointer-events: auto; }
+
+/* ---------- Scroll progress ticks (nav-style breadcrumbs for the sequence) ---------- */
+.tc-progress-rail {
+  position: absolute;
+  z-index: 6;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+}
+@media (min-width: 900px) {
+  .tc-progress-rail { display: flex; }
+}
+.tc-progress-rail .tick {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(27,29,34,0.18);
+  transition: background .3s, transform .3s;
+}
+.tc-progress-rail .tick.tc-on { background: var(--tc-blue); transform: scale(1.3); }
+
+/* ---------- Final settle actions ---------- */
+.tc-final-actions {
+  position: absolute;
+  z-index: 5;
+  left: 0; right: 0; bottom: 56px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .4s, transform .4s;
+  pointer-events: none;
+}
+.tc-final-actions.tc-visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+/* ---------- Static fallback layout (default; also reduced motion / no WebGL) ---------- */
+.tc-static-services {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: min(1240px, calc(100% - 48px));
+  margin: 0 auto 72px;
+}
+.tc-static-services .tc-service-tile {
+  background: rgba(255,255,255,0.75);
+  border: 1px solid rgba(27,29,34,0.08);
+  border-radius: var(--tc-radius);
+  padding: 26px;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: var(--tc-charcoal);
+}
+.tc-static-services .tc-service-tile:hover { border-color: var(--tc-blue); }
+.tc-static-services .tc-service-tile h3 { margin: 10px 0 8px; font-family: var(--font-display); font-size: 19px; }
+.tc-static-services .tc-service-tile p { margin: 0; font-size: 14px; color: var(--tc-charcoal-soft); line-height: 1.5; }
+.tc-static-note {
+  width: min(1240px, calc(100% - 48px));
+  margin: 0 auto 28px;
+  font-size: 13px;
+  color: var(--tc-silver-dark);
+}
+
+@media (max-width: 760px) {
+  .tc-stage-wrap.tc-static .tc-static-services { grid-template-columns: 1fr; }
+}
+
+/* ---------- Service dialog ---------- */
+.tc-dialog {
+  border: none;
+  border-radius: 20px;
+  padding: 0;
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(680px, calc(100vh - 64px));
+  box-shadow: 0 30px 70px rgba(27,29,34,0.28);
+  color: var(--tc-charcoal);
+}
+.tc-dialog::backdrop { background: rgba(20,22,26,0.45); backdrop-filter: blur(2px); }
+.tc-dialog-inner { padding: 28px 28px 24px; overflow-y: auto; max-height: inherit; }
+.tc-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 4px; }
+.tc-dialog-head h2 { font-family: var(--font-display); font-size: 24px; margin: 0; }
+.tc-dialog-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--tc-silver-dark); margin: 0 0 6px; }
+.tc-dialog-close {
+  background: var(--tc-grey);
+  border: none;
+  border-radius: 50%;
+  width: 34px; height: 34px;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tc-dialog-close:hover { background: var(--tc-grey-2); }
+.tc-illustrative-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #9a6b00;
+  background: #fff3da;
+  border: 1px solid #f0d9ab;
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin: 10px 0 16px;
+}
+.tc-dialog-body p { font-size: 14.5px; line-height: 1.55; color: var(--tc-charcoal-soft); }
+
+/* Waveform (decorative only) */
+.tc-waveform { display: flex; align-items: center; gap: 3px; height: 34px; margin: 14px 0; }
+.tc-waveform span {
+  width: 4px; border-radius: 2px;
+  background: var(--tc-blue-soft);
+  animation: tc-wave 1.1s ease-in-out infinite;
+}
+.tc-waveform span:nth-child(odd) { animation-delay: -0.4s; }
+.tc-waveform span:nth-child(3n) { animation-delay: -0.75s; }
+@keyframes tc-wave { 0%, 100% { height: 20%; } 50% { height: 100%; } }
+
+.tc-sample-convo { background: var(--tc-grey); border-radius: 14px; padding: 14px 16px; margin: 14px 0; display: flex; flex-direction: column; gap: 10px; }
+.tc-sample-convo .bubble { max-width: 85%; padding: 9px 13px; border-radius: 12px; font-size: 13.5px; line-height: 1.4; }
+.tc-sample-convo .bubble.caller { background: #fff; align-self: flex-start; border: 1px solid rgba(27,29,34,0.08); }
+.tc-sample-convo .bubble.ai { background: var(--tc-blue); color: #fff; align-self: flex-end; }
+
+.tc-slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 14px 0; }
+.tc-slot-grid button { background: var(--tc-grey); border: 1px solid rgba(27,29,34,0.08); border-radius: 10px; padding: 10px 6px; font-size: 13px; cursor: pointer; }
+.tc-slot-grid button[aria-pressed="true"] { background: var(--tc-blue); color: #fff; border-color: var(--tc-blue); }
+
+.tc-lead-steps { display: flex; flex-direction: column; gap: 0; margin: 16px 0; }
+.tc-lead-steps .step { display: flex; gap: 12px; padding: 10px 0; }
+.tc-lead-steps .step .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--tc-grey); border: 1px solid rgba(27,29,34,0.12); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.tc-lead-steps .step.done .dot { background: var(--tc-blue); color: #fff; border-color: var(--tc-blue); }
+.tc-lead-steps .step strong { display: block; font-size: 14px; }
+.tc-lead-steps .step span { font-size: 13px; color: var(--tc-charcoal-soft); }
+.tc-lead-steps .step:not(:last-child) { border-left: 2px solid var(--tc-grey-2); margin-left: 10px; padding-left: 20px; }
+.tc-lead-steps .step:not(:last-child) .dot { margin-left: -31px; }
+
+.tc-dialog-actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .tc-root * { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 980px) {
+  .tc-hero-copy { max-width: 100%; }
+  .tc-content-inner { text-align: left; }
+  .tc-hotspot-legend { right: 16px; }
+}
+@media (max-width: 760px) {
+  .tc-nav-links { gap: 16px; font-size: 13px; }
+  .tc-nav-links span.tc-nav-hide-sm { display: none; }
+  .tc-stage-wrap.tc-enhanced { height: 320vh; }
+  .tc-hero-copy h1 { font-size: clamp(34px, 11vw, 48px); }
+  .tc-content { padding: 0 2px; }
+  .tc-hotspot-legend { display: none; } /* overlay hotspots + static list below cover phones */
+  .tc-progress-rail { display: none; }
+}
+/* Phone width: the 760px nav (wordmark + Systems + Experience + Book a
+   demo) is still wider than a ~390px screen's content box and was
+   clipping "Book a demo" off the right edge. Tighten further rather than
+   letting it overflow or wrap. */
+@media (max-width: 480px) {
+  .tc-wordmark small { display: none; }
+  .tc-nav-links { gap: 8px; }
+  .tc-nav-links .tc-btn { padding: 9px 14px; font-size: 12.5px; min-height: 36px; }
+}
+/* `overflow-x: hidden` on BOTH html and body breaks position:sticky on
+   descendants in Chrome. Per the CSS Overflow spec, setting overflow-x to
+   anything but visible/clip forces the *computed* value of overflow-y to
+   `auto` too — even if overflow-y is explicitly written as `visible`,
+   that's overridden. So body ends up with overflow-y:auto and becomes a
+   second scroll container competing with html, and .tc-pin's sticky
+   positioning never locks to the viewport during the pinned scroll
+   sequence — it just scrolls away with its (very tall) parent.
+   styles.css (loaded before this file) sets `body{overflow-x:hidden}` on
+   its own (a pre-existing, previously-harmless rule, since nothing used
+   position:sticky against a tall track before this redesign). html's own
+   overflow-x:hidden already clips any horizontal overflow at the real
+   viewport-scrolling level, so body doesn't need its own overflow-x at
+   all — this cancels styles.css's rule back to the initial value instead
+   of re-triggering the same auto-pairing with a different axis. */
+html { overflow-x: hidden; }
+body { overflow-x: initial; }

@@ -1,25 +1,30 @@
 (function () {
   "use strict";
 
-  /* ---------- Mobile nav ---------- */
+  /* ---------- Mobile nav (legacy header; not present since the
+     cinematic-opening redesign replaced it with a minimal nav that has
+     no hamburger toggle. Guarded rather than removed in case an older
+     page/email template still links to the old #menu/#navlinks ids.) ---------- */
   var menu = document.getElementById("menu");
   var navlinks = document.getElementById("navlinks");
-  menu.addEventListener("click", function () {
-    var open = navlinks.classList.toggle("open");
-    menu.setAttribute("aria-expanded", String(open));
-  });
-  navlinks.querySelectorAll("a").forEach(function (a) {
-    a.addEventListener("click", function () {
-      navlinks.classList.remove("open");
-      menu.setAttribute("aria-expanded", "false");
+  if (menu && navlinks) {
+    menu.addEventListener("click", function () {
+      var open = navlinks.classList.toggle("open");
+      menu.setAttribute("aria-expanded", String(open));
     });
-  });
-  document.addEventListener("click", function (e) {
-    if (!menu.contains(e.target) && !navlinks.contains(e.target)) {
-      navlinks.classList.remove("open");
-      menu.setAttribute("aria-expanded", "false");
-    }
-  });
+    navlinks.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        navlinks.classList.remove("open");
+        menu.setAttribute("aria-expanded", "false");
+      });
+    });
+    document.addEventListener("click", function (e) {
+      if (!menu.contains(e.target) && !navlinks.contains(e.target)) {
+        navlinks.classList.remove("open");
+        menu.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
 
   /* ---------- Scroll-reveal ---------- */
   (function () {
