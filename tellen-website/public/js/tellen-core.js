@@ -151,14 +151,22 @@ export function create(canvas, { reducedQuality = false } = {}) {
   camera.lookAt(0, 0, 0);
 
   // Key + fill lights on top of the environment map (gives sharper
-  // specular highlights than the env alone would).
-  const key = new THREE.DirectionalLight(0xffffff, 1.4);
+  // specular highlights than the env alone would). Ambient is kept
+  // fairly low so the key light still carves out visible shadow/highlight
+  // contrast across the machined facets instead of flattening them.
+  const key = new THREE.DirectionalLight(0xffffff, 1.55);
   key.position.set(4, 5, 3);
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0xdfe8ff, 0.5);
+  const fill = new THREE.DirectionalLight(0xdfe8ff, 0.45);
   fill.position.set(-4, 2, -3);
   scene.add(fill);
-  scene.add(new THREE.AmbientLight(0xffffff, 0.35));
+  // Cool rim light opposite the key, tinted to match the core's blue glow —
+  // separates the ring's silhouette from the light studio backdrop and
+  // ties a thin blue edge-highlight on the metal back to the core color.
+  const rim = new THREE.DirectionalLight(0x6f9bff, 0.4);
+  rim.position.set(-2, -1.5, -5);
+  scene.add(rim);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.26));
 
   // ---- Ring segments ----
   const gapRad = (GAP_DEGREES * Math.PI) / 180;
@@ -166,10 +174,10 @@ export function create(canvas, { reducedQuality = false } = {}) {
   const metalMat = new THREE.MeshPhysicalMaterial({
     color: 0xd9dde3,
     metalness: 1,
-    roughness: 0.28,
-    clearcoat: 0.25,
-    clearcoatRoughness: 0.35,
-    envMapIntensity: 1.15,
+    roughness: 0.22,
+    clearcoat: 0.4,
+    clearcoatRoughness: 0.18,
+    envMapIntensity: 1.3,
   });
 
   const segmentGroup = new THREE.Group();
@@ -192,13 +200,20 @@ export function create(canvas, { reducedQuality = false } = {}) {
   scene.add(segmentGroup);
 
   // ---- Blue illuminated interior ----
+  // flatShading keeps each icosahedron facet a distinct flat plane, so the
+  // core reads as a cut, glowing gem rather than a smooth plastic ball —
+  // crisper and more "precision machined" to match the ring segments. A
+  // thin clearcoat adds a sharp specular pass on top of the emissive glow.
   const coreGeo = new THREE.IcosahedronGeometry(0.62, lowDetail ? 1 : 2);
-  const coreMat = new THREE.MeshStandardMaterial({
+  const coreMat = new THREE.MeshPhysicalMaterial({
     color: 0x1d3fc9,
     emissive: 0x3f6bff,
-    emissiveIntensity: 1.6,
-    roughness: 0.35,
-    metalness: 0.1,
+    emissiveIntensity: 1.75,
+    roughness: 0.22,
+    metalness: 0.05,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.2,
+    flatShading: true,
   });
   const core = new THREE.Mesh(coreGeo, coreMat);
   scene.add(core);
@@ -332,7 +347,7 @@ export function create(canvas, { reducedQuality = false } = {}) {
 
     const glowScale = 2.2 + state.separation * 0.9;
     glow.scale.set(glowScale, glowScale, 1);
-    coreMat.emissiveIntensity = 1.4 + state.separation * 0.8;
+    coreMat.emissiveIntensity = 1.55 + state.separation * 0.8;
 
     // Connecting lines: triangle between the three separated segments,
     // with a travelling pulse implied by a gentle opacity breathe.
