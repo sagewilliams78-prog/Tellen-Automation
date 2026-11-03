@@ -35,8 +35,19 @@ body {
   color: var(--white);
   font-family: var(--font-body);
   line-height: 1.55;
+  /* Crisper type on dark backgrounds: without this, WebKit/Blink fall back
+     to subpixel anti-aliasing, which on a navy/black page reads noticeably
+     heavier and softer than the same type on macOS/iOS native apps. */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 h1, h2, h3, .brand-text, .amount, .step .number, .chat-head strong { font-family: var(--font-display); }
+/* Space Grotesk's heaviest real weight is 700 (Bold) — it has no 800/ExtraBold
+   instance. Asking for font-weight:800 on anything in --font-display has no
+   matching face to pick, so the browser synthetically emboldens the 700 face
+   instead, which renders visibly chunkier/fuzzier than the real Bold. Every
+   --font-display rule below is pinned to 700 for that reason. */
 .eyebrow, .plan-label, .ribbon, .hero-signature, .industry-grid article span, .chat-head span { font-family: var(--font-mono); }
 a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; max-width: 100%; }
@@ -57,6 +68,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   height: 78px;
   background: rgba(2, 9, 19, .92);
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px); /* without this, Safari drops the blur
+    entirely (no fallback softening) — the nav still shows the tinted
+    background, just flat instead of frosted, unlike every other glass
+    surface on the page, which all already carry this prefix */
   position: sticky;
   top: 0;
   z-index: 20;
@@ -66,7 +81,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; gap: 24px; }
 .brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .brand img { height: 48px; width: 48px; object-fit: contain; object-position: center; border-radius: 7px; filter: drop-shadow(0 0 8px #168fff44); }
-.brand-text { font-size: 20px; letter-spacing: .28em; font-weight: 800; line-height: 1.05; }
+.brand-text { font-size: 20px; letter-spacing: .28em; font-weight: 700; line-height: 1.05; }
 .brand-text small { display: block; color: var(--cyan); font-size: 8px; letter-spacing: .48em; margin-top: 6px; }
 .navlinks { display: flex; align-items: center; gap: 28px; font-size: 13px; }
 .navlinks a:hover, .foot a:hover { color: var(--cyan); }
@@ -95,7 +110,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   min-height: 46px;
 }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 9px 25px #087ff24d; }
-.btn.secondary { background: rgba(2, 12, 24, .74); border: 1px solid #54adf4; box-shadow: none; backdrop-filter: blur(8px); }
+.btn.secondary { background: rgba(2, 12, 24, .74); border: 1px solid #54adf4; box-shadow: none; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .mobile-menu { display: none; background: none; color: #fff; border: 1px solid #2b4d68; border-radius: 8px; padding: 8px 12px; }
 
 /* ---------- Hero ---------- */
@@ -263,7 +278,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .step-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .step { border-right: 1px solid #c7d8ea; padding-right: 16px; }
 .step:last-child { border: 0; }
-.step .number { background: #b7dcff; color: #0868b6; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; font-size: 23px; font-weight: 800; }
+.step .number { background: #b7dcff; color: #0868b6; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 50%; font-size: 23px; font-weight: 700; }
 .step h3 { font-size: 15px; }
 .step p { font-size: 13px; }
 
@@ -281,7 +296,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .plan-label { color: #51c4ff; font-size: 10px; letter-spacing: .19em; font-weight: 800; margin-bottom: 13px; }
 .price h3 { margin: 0; font-size: 21px; }
 .price .desc { font-size: 12px; min-height: 38px; }
-.amount { font-size: 34px; font-weight: 800; letter-spacing: -.025em; margin: 12px 0; color: #fff; }
+.amount { font-size: 34px; font-weight: 700; letter-spacing: -.025em; margin: 12px 0; color: #fff; }
 .amount small { font-size: 13px; font-weight: 400; color: var(--muted); }
 .setup { color: #a9bed4; font-size: 12px; margin: 12px 0 20px; }
 .price ul { list-style: none; padding: 0; margin: 5px 0 28px; flex: 1; }
@@ -369,7 +384,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   width: min(680px, calc(100% - 32px)); max-width: min(620px, calc(100vw - 28px));
   max-height: 80dvh; overflow: auto;
 }
-.legal-dialog::backdrop { background: #000b; backdrop-filter: blur(5px); }
+.legal-dialog::backdrop { background: #000b; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); }
 .legal-dialog h2 { margin-top: 0; }
 .legal-dialog p, .legal-dialog li { font-size: 13px; color: #b6cce1; }
 .close { float: right; background: #0e2a43; border: 1px solid #3671a0; color: #fff; border-radius: 6px; padding: 6px 10px; }
