@@ -508,6 +508,51 @@
   .tc-content { padding: 0 2px; }
   .tc-hotspot-legend { display: none; } /* overlay hotspots + static list below cover phones */
   .tc-progress-rail { display: none; }
+  /* The hero copy stays visible for the whole pinned sequence on desktop
+     (by design — it's docked in a left column clear of the ring). On
+     phones .tc-hero-copy goes full-width and .tc-content-inner is
+     left-aligned instead, but the camera keyframes are shared with
+     desktop and keep the ring roughly screen-centered — with .tc-content
+     still vertically centering its content (the default, unmodified
+     here), the text sat directly on top of the ring for the whole
+     scroll. Anchoring the copy to the top of the pinned viewport clears
+     it from the ring during the opening "reveal" framing, which has the
+     lower portion of the screen to itself; see the tc-hero-copy-hidden
+     rule further down for what happens once the ring grows past that. */
+  .tc-stage-wrap.tc-enhanced .tc-content {
+    align-items: flex-start;
+    padding-top: calc(var(--tc-nav-h) + 8px);
+  }
+  /* Compact the copy block itself too (tighter margins) so the CTA row
+     clears the ring with real breathing room instead of just grazing it,
+     without pushing the whole block so far down it crowds the nav. */
+  .tc-hero-copy .tc-eyebrow-row { margin-bottom: 12px; }
+  .tc-hero-copy h1 { margin-bottom: 14px; }
+  .tc-hero-copy p { margin-bottom: 20px; }
+  /* .tc-content-inner's own `margin: auto` (set above, for horizontal
+     centering) also auto-centers it on the cross axis, which overrides
+     the parent's align-items entirely — a flex item's auto margin wins
+     over the container's align-items for that axis. Zero out the
+     top/bottom margin here so the flex-start alignment above actually
+     takes effect. */
+  .tc-stage-wrap.tc-enhanced .tc-content-inner {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  /* Past the opening "reveal" framing the ring grows substantially
+     (that's the "approach" stage closing in) and, at phone width, grows
+     straight into the space the hero copy occupies above. JS toggles
+     this class once the ScrollTrigger progress leaves the reveal stage
+     (see opening-experience.js's applyFrame); desktop never gets the
+     class's non-mobile-only sibling behavior since there isn't one —
+     this rule is scoped to the same 760px breakpoint as the rest of the
+     mobile layout above. */
+  .tc-hero-copy { transition: opacity 0.35s ease, transform 0.35s ease; }
+  .tc-hero-copy-hidden {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+  }
 }
 /* Phone width: the 760px nav (wordmark + Systems + Experience + Book a
    demo) is still wider than a ~390px screen's content box and was

@@ -184,6 +184,7 @@
   const labelExplore = document.getElementById("tcLabelExplore");
   const labelConnect = document.getElementById("tcLabelConnect");
   const finalActions = document.getElementById("tcFinalActions");
+  const heroCopy = document.querySelector(".tc-hero-copy");
   const progressTicks = document.querySelectorAll("#tcProgressRail .tick");
 
   const STAGES = {
@@ -253,6 +254,14 @@
     core?.setSeparation(separationForProgress(p));
     core?.setConnect(connectForProgress(p));
 
+    // On phones the hero copy runs full-width (the desktop layout keeps
+    // it docked in a left column clear of the ring; see cinematic.css's
+    // 760px breakpoint), so once the ring grows past the opening "reveal"
+    // framing it sits directly behind the text. Fading the copy out past
+    // that point is a no-op on desktop (the rule below is mobile-only)
+    // and mirrors how the other stage-specific UI here is already
+    // toggled via tc-visible.
+    heroCopy?.classList.toggle("tc-hero-copy-hidden", stage !== "reveal");
     labelApproach.classList.toggle("tc-visible", stage === "approach");
     labelExplore.classList.toggle("tc-visible", stage === "explore" && focusedSegment === null);
     labelConnect.classList.toggle("tc-visible", stage === "connect");

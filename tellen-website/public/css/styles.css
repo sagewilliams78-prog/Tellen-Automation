@@ -346,8 +346,40 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .est-panel { padding: 30px; background: #08192c; border: 1px solid #28608c; border-radius: 18px; box-shadow: 0 20px 50px #0006; }
 .est-panel > label:first-child { display: block; margin-bottom: 8px; font-size: 13px; }
 .est-panel select { width: 100%; min-height: 50px; background: #0e2943; color: #fff; border: 1px solid #35638a; border-radius: 9px; padding: 10px; margin-bottom: 18px; }
-.est-check { display: flex; gap: 12px; align-items: center; padding: 11px 0; color: #dceafa; font-size: 13px; }
-.est-check input { accent-color: #168fff; width: 19px; height: 19px; }
+.est-check { display: flex; gap: 12px; align-items: center; padding: 11px 0; color: #dceafa; font-size: 13px; cursor: pointer; }
+/* Custom checkbox instead of the native control: unstyled checkboxes
+   render using each OS/browser's own chrome (a plain grey/beige box on
+   some platforms) which clashes with the panel's dark-navy, blue-accent
+   design language used everywhere else on the page. appearance:none
+   strips the native box so this renders identically everywhere. */
+.est-check input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  margin: 0;
+  border-radius: 5px;
+  border: 1.5px solid #35638a;
+  background: #0e2943;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.est-check input[type="checkbox"]:hover { border-color: #5892bd; }
+.est-check input[type="checkbox"]:checked { background: #168fff; border-color: #168fff; }
+.est-check input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.est-check input[type="checkbox"]:focus-visible { outline: 2px solid #168fff; outline-offset: 2px; }
 .est-result { margin: 20px 0; padding: 18px 0; border-top: 1px solid #2a4b67; border-bottom: 1px solid #2a4b67; }
 .est-result > div { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin: 9px 0; }
 .est-result span { color: #aec3d8; font-size: 12px; }
