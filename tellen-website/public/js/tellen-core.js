@@ -41,20 +41,6 @@ function isMobile() {
   return window.matchMedia("(max-width: 760px)").matches;
 }
 
-/** A resting-heart-rate pulse envelope (~63 BPM), returning 0..1 for a
- * given elapsed time in seconds. Two narrow gaussian spikes near the
- * start of each cycle (a bigger "lub", a smaller "dub" shortly after)
- * followed by a longer quiet stretch reads as an actual heartbeat rather
- * than a smooth sine breathing — the asymmetry (two sharp beats, then
- * rest) is what makes it recognizable at a glance. */
-function heartbeatPulse(t) {
-  const period = 0.95;
-  const phase = (t % period) / period;
-  const lub = Math.exp(-(((phase - 0.05) * 26) ** 2));
-  const dub = Math.exp(-(((phase - 0.19) * 30) ** 2)) * 0.6;
-  return Math.min(1, lub + dub);
-}
-
 /** 2D rounded cross-section for the segment tube (gives the "precision
  * machined" rounded-edge look without a bevel pass). */
 function roundedCrossSection(width, height, r) {
@@ -255,16 +241,6 @@ export function create(canvas, { reducedQuality = false } = {}) {
   glow.scale.set(2.6, 2.6, 1);
   scene.add(glow);
 
-  // A small light living at the core's center, pulsed in animate() in
-  // lockstep with the emissive/glow heartbeat below. Driving an actual
-  // light (not just the core's own material) means the beat visibly
-  // washes a bit of blue onto the nearby ring segments each time it
-  // fires, instead of the pulse being confined to the core mesh itself —
-  // reads more like the core is a light source the ring sits around,
-  // which is the "this is the AI, alive" effect we're after.
-  const coreLight = new THREE.PointLight(0x5c8aff, 0, 3.4, 2);
-  scene.add(coreLight);
-
   // ---- Soft grounding shadow (fake, cheap) ----
   const shadowTex = radialGradientTexture("rgba(20,22,26,0.28)", "rgba(20,22,26,0)");
   const shadowMat = new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false });
@@ -299,7 +275,6 @@ export function create(canvas, { reducedQuality = false } = {}) {
   }
 
   let idleT = 0;
-  let heartbeatT = 0;
   let pointer = { x: 0, y: 0 };
   let targetPointer = { x: 0, y: 0 };
   let paused = false;
@@ -390,7 +365,6 @@ export function create(canvas, { reducedQuality = false } = {}) {
     if (paused) return;
 
     idleT += 0.0045;
-    heartbeatT += 1 / 60; // real seconds (unlike idleT's own arbitrary unit), so heartbeatPulse's period reads as an actual ~63 BPM rate
     pointer.x += (targetPointer.x - pointer.x) * 0.04;
     pointer.y += (targetPointer.y - pointer.y) * 0.04;
 
@@ -407,15 +381,9 @@ export function create(canvas, { reducedQuality = false } = {}) {
       seg.pivot.position.set(seg.normal.x * dist, pointer.y * 0.05 * idleInfluence, seg.normal.z * dist);
     });
 
-    // Heartbeat: a quiet, steady pulse in the core's own glow — reads as
-    // "something alive is in there" without being distracting. Layered on
-    // top of (not replacing) the existing separation-driven brightening,
-    // so the scroll choreography's own glow changes are untouched.
-    const pulse = heartbeatPulse(heartbeatT);
-    const glowScale = 2.2 + state.separation * 0.9 + pulse * 0.32;
+    const glowScale = 2.2 + state.separation * 0.9;
     glow.scale.set(glowScale, glowScale, 1);
-    coreMat.emissiveIntensity = 1.55 + state.separation * 0.8 + pulse * 1.05;
-    coreLight.intensity = pulse * 1.3;
+    coreMat.emissiveIntensity = 1.55 + state.separation * 0.8;
 
     // Connecting lines: triangle between the three separated segments,
     // with a travelling pulse implied by a gentle opacity breathe.
