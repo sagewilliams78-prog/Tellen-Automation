@@ -55,7 +55,8 @@
     <span class="tc-wordmark">TELLEN<small>AUTOMATION</small></span>
     <nav class="tc-nav-links" aria-label="Primary">
       <button type="button" data-tc-nav="systems">Systems</button>
-      <button type="button" data-tc-nav="experience" aria-label="Experience"><span class="tc-nav-hide-sm">Experience</span></button>
+      <button type="button" data-tc-nav="experience" aria-label="Experience" class="tc-nav-hide-sm">Experience</button>
+      <button type="button" data-tc-nav="pricing">Pricing</button>
       <button type="button" class="tc-btn tc-btn-primary" id="tcBookDemo">Book a demo</button>
     </nav>
   </div>
@@ -310,9 +311,11 @@
     <form class="form" id="leadForm" novalidate>
       <label>Your name
         <input type="text" name="name" placeholder="Your name" autocomplete="name" required maxlength="120" />
+        <span class="field-error" role="alert">Please enter your name.</span>
       </label>
       <label>Business email
         <input type="email" name="email" placeholder="you@company.com" autocomplete="email" required maxlength="200" />
+        <span class="field-error" role="alert">Please enter a valid business email.</span>
       </label>
       <label>Business name
         <input type="text" name="company" placeholder="Company name" autocomplete="organization" maxlength="150" />

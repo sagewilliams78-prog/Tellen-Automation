@@ -147,6 +147,15 @@
   function goToContact() {
     document.getElementById("contact")?.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth" });
   }
+  // Nav previously had no direct way to reach Pricing (or anything below
+  // the hero) short of scrolling through it — "Systems"/"Experience" only
+  // jump to points inside the cinematic sequence itself. Pricing is
+  // usually the first thing a prospective client is looking for, so it
+  // gets its own always-available jump straight to the section, the same
+  // way Book a demo already jumps straight to #contact.
+  function goToPricing() {
+    document.getElementById("pricing")?.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth" });
+  }
   function tryReceptionist() {
     document.getElementById("chatLauncher")?.click();
   }
@@ -154,6 +163,7 @@
   document.getElementById("tcFinalTry")?.addEventListener("click", tryReceptionist);
   document.getElementById("tcFinalBook")?.addEventListener("click", goToContact);
   document.getElementById("tcBookDemo")?.addEventListener("click", goToContact);
+  document.querySelectorAll('[data-tc-nav="pricing"]').forEach((el) => el.addEventListener("click", goToPricing));
 
   function updateBackOverviewVisibility() {
     const back = document.getElementById("tcBackOverview");

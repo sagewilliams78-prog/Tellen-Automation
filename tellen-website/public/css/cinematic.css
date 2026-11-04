@@ -501,8 +501,14 @@
   .tc-hotspot-legend { right: 16px; }
 }
 @media (max-width: 760px) {
-  .tc-nav-links { gap: 16px; font-size: 13px; }
-  .tc-nav-links span.tc-nav-hide-sm { display: none; }
+  .tc-nav-links { gap: 14px; font-size: 13px; }
+  /* Previously this rule targeted an inner <span>, hiding only the label
+     text but leaving the (now-empty, ~4px wide) button itself in place —
+     a near-invisible but still focusable/clickable sliver in the nav
+     bar. Moved tc-nav-hide-sm onto the button itself so the whole
+     control disappears cleanly on phones, where there isn't room for it
+     and Pricing (added below) is the more useful destination anyway. */
+  .tc-nav-links .tc-nav-hide-sm { display: none; }
   .tc-stage-wrap.tc-enhanced { height: 320vh; }
   .tc-hero-copy h1 { font-size: clamp(34px, 11vw, 48px); }
   .tc-content { padding: 0 2px; }
@@ -554,14 +560,26 @@
     pointer-events: none;
   }
 }
-/* Phone width: the 760px nav (wordmark + Systems + Experience + Book a
-   demo) is still wider than a ~390px screen's content box and was
-   clipping "Book a demo" off the right edge. Tighten further rather than
-   letting it overflow or wrap. */
+/* Phone width: the 760px nav (wordmark + Systems + Book a demo —
+   Experience is hidden below 760px) is still wider than a ~390px
+   screen's content box and was clipping "Book a demo" off the right
+   edge. Tighten further rather than letting it overflow or wrap. */
 @media (max-width: 480px) {
   .tc-wordmark small { display: none; }
-  .tc-nav-links { gap: 8px; }
+  .tc-nav-links { gap: 8px; font-size: 12.5px; }
   .tc-nav-links .tc-btn { padding: 9px 14px; font-size: 12.5px; min-height: 36px; }
+}
+/* Adding a Pricing link alongside Systems made the 480px nav (wordmark +
+   Systems + Pricing + Book a demo) overflow again below ~380px,
+   clipping Book a demo the same way the comment above already
+   describes. Pricing matters more to a visitor than Systems at this
+   width — Systems just jumps into a point in the hero animation they
+   can also reach by scrolling, while Pricing is the one thing nav
+   should guarantee reaches in one tap — so Systems is what gives way
+   here rather than tightening spacing further and risking the same
+   clipping on an even narrower phone. */
+@media (max-width: 380px) {
+  .tc-nav-links [data-tc-nav="systems"] { display: none; }
 }
 /* `overflow-x: hidden` on BOTH html and body breaks position:sticky on
    descendants in Chrome. Per the CSS Overflow spec, setting overflow-x to

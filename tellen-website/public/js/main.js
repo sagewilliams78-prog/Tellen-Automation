@@ -130,19 +130,56 @@
     var status = document.getElementById("formStatus");
     if (!form) return;
 
+    var nameInput = form.querySelector('[name="name"]');
+    var emailInput = form.querySelector('[name="email"]');
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     function setStatus(text, state) {
       status.textContent = text;
       if (state) status.setAttribute("data-state", state);
       else status.removeAttribute("data-state");
     }
 
+    // Marks (or clears) a single field as invalid. The form carries
+    // novalidate so the browser's own red-outline/tooltip validation UI
+    // never runs for this async-submit flow — this is what replaces it:
+    // aria-invalid drives the red border + inline message in styles.css,
+    // and focusing the first invalid field (in the submit handler below)
+    // scrolls it into view the same way native validation would.
+    function setFieldValid(input, valid) {
+      if (valid) input.removeAttribute("aria-invalid");
+      else input.setAttribute("aria-invalid", "true");
+    }
+    // Clear a field's error as soon as the visitor starts fixing it,
+    // rather than leaving the red border up until the next submit.
+    [nameInput, emailInput].forEach(function (input) {
+      input.addEventListener("input", function () {
+        if (input === nameInput && input.value.trim()) setFieldValid(input, true);
+        if (input === emailInput && EMAIL_RE.test(input.value.trim())) setFieldValid(input, true);
+      });
+    });
+
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var btn = form.querySelector("button[type=submit]");
       var data = Object.fromEntries(new FormData(form).entries());
 
-      if (!data.name || !data.email) {
-        setStatus("Please fill in your name and business email before submitting.", "error");
+      var nameValid = !!(data.name && data.name.trim());
+      var emailValid = !!(data.email && EMAIL_RE.test(data.email.trim()));
+      setFieldValid(nameInput, nameValid);
+      setFieldValid(emailInput, emailValid);
+
+      if (!nameValid || !emailValid) {
+        var firstInvalid = !nameValid ? nameInput : emailInput;
+        firstInvalid.focus();
+        setStatus(
+          !nameValid && !emailValid
+            ? "Please fill in your name and a valid business email — highlighted above."
+            : !nameValid
+            ? "Please fill in your name — highlighted above."
+            : "Please enter a valid business email — highlighted above.",
+          "error"
+        );
         return;
       }
 
